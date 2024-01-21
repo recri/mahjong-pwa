@@ -22,7 +22,9 @@ export class MahjongApp extends LitElement {
       font-size: 4vmax;
     }
     /* the p is added here to silence lighthouse NO_LCP error */
-    p { color: #323657; }
+    p {
+      color: #323657;
+    }
   `;
 
   @property({ type: Object }) play: Play;
@@ -67,10 +69,15 @@ export class MahjongApp extends LitElement {
   /* eslint-enable wc/guard-super-call */
 
   // dialogs
-  get youlose(): any { return this.shadowRoot!.getElementById('youlose'); }
+  get youlose(): any {
+    return this.shadowRoot!.getElementById('youlose');
+  }
 
-  get youwin(): any { return this.shadowRoot!.getElementById('youwin'); }
-  
+  get youwin(): any {
+    return this.shadowRoot!.getElementById('youwin');
+  }
+
+  /* eslint class-methods-use-this: ["error", { "exceptMethods": ["dialogShowModal"] }] */
   dialogShowModal(dialog: any) {
     if (dialog instanceof HTMLDialogElement) {
       dialog.showModal();
@@ -83,23 +90,35 @@ export class MahjongApp extends LitElement {
     }
     this.play.dialog(msg);
   }
-  
-  youlose_undo() { this.dialogClose(this.youlose, 'undo'); }
 
-  youlose_new() { this.dialogClose(this.youlose, 'new'); }
+  youlose_undo() {
+    this.dialogClose(this.youlose, 'undo');
+  }
 
-  youlose_restart() { this.dialogClose(this.youlose, 'restart'); }
+  youlose_new() {
+    this.dialogClose(this.youlose, 'new');
+  }
 
-  youwin_undo() { this.dialogClose(this.youwin, 'undo'); }
+  youlose_restart() {
+    this.dialogClose(this.youlose, 'restart');
+  }
 
-  youwin_new() { this.dialogClose(this.youwin, 'new'); }
+  youwin_undo() {
+    this.dialogClose(this.youwin, 'undo');
+  }
 
-  youwin_restart() { this.dialogClose(this.youwin, 'restart'); }
+  youwin_new() {
+    this.dialogClose(this.youwin, 'new');
+  }
+
+  youwin_restart() {
+    this.dialogClose(this.youwin, 'restart');
+  }
 
   //
   //
   //
-  
+
   override render() {
     const margin = 5;
     const { width, height } = this;
@@ -114,45 +133,56 @@ export class MahjongApp extends LitElement {
 p { color: 
     `;
 
-    if (this.play.gameIsCompleted) { this.dialogShowModal(this.youwin); }
-    if (this.play.gameIsDeadlocked) { this.dialogShowModal(this.youlose); }
+    if (this.play.gameIsCompleted) {
+      this.dialogShowModal(this.youwin);
+    }
+    if (this.play.gameIsDeadlocked) {
+      this.dialogShowModal(this.youlose);
+    }
 
-    return html` <style>
+    return html`
+      <style>
         ${style}
       </style>
-<p>lorem ipsum</p>
+      <p>lorem ipsum</p>
       <mahjong-view
         .play=${this.play}
         .playTiles=${this.playTiles}
         .discardTiles=${this.discardTiles}
         .width=${width - 2 * margin}
         .height=${height - 2 * margin}
-       ></mahjong-view>
+      ></mahjong-view>
 
-       <dialog id="youlose" modal>
-         <h2>There are no more moves.</h2>
-         <div class="buttons">
-           <button raised dialog-confirm @click=${() => this.youlose_undo()}>
-             Undo</button>
-           <button raised dialog-confirm @click=${() => this.youlose_restart()}>
-             Restart</button>
-           <button raised dialog-confirm @click=${() => this.youlose_new()}>
-             New Game</button>
-         </div>
-       </dialog>
-      
-       <dialog id="youwin" modal>
-         <h2>You have won the game</h2>
-         <div class="buttons">
-           <button raised dialog-confirm @click=${() => this.youwin_undo()}>
-             Undo</button>
-           <button raised dialog-confirm @click=${() => this.youwin_restart()}>
-             Restart</button>
-           <button raised dialog-confirm @click=${() => this.youwin_new()}>
-             New Game</button>
-         </div>
-       </dialog>
-       `;
+      <dialog id="youlose" modal>
+        <h2>There are no more moves.</h2>
+        <div class="buttons">
+          <button raised dialog-confirm @click=${() => this.youlose_undo()}>
+            Undo
+          </button>
+          <button raised dialog-confirm @click=${() => this.youlose_restart()}>
+            Restart
+          </button>
+          <button raised dialog-confirm @click=${() => this.youlose_new()}>
+            New Game
+          </button>
+        </div>
+      </dialog>
+
+      <dialog id="youwin" modal>
+        <h2>You have won the game</h2>
+        <div class="buttons">
+          <button raised dialog-confirm @click=${() => this.youwin_undo()}>
+            Undo
+          </button>
+          <button raised dialog-confirm @click=${() => this.youwin_restart()}>
+            Restart
+          </button>
+          <button raised dialog-confirm @click=${() => this.youwin_new()}>
+            New Game
+          </button>
+        </div>
+      </dialog>
+    `;
   }
 }
 declare global {

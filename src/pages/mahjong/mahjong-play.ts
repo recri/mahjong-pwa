@@ -39,7 +39,7 @@ export class Play {
   get canUndiscardTiles(): Tile[] {
     return this.game.canUndiscardTiles;
   }
-  
+
   constructor() {
     this.game = new Game();
     this.deal = new GameDeal();
@@ -105,39 +105,45 @@ export class Play {
     if (tile !== undefined && tile.canPlay) {
       const selected = this.playTiles.filter(tile1 => tile1.isSelected);
       if (selected.length === 0) {
-	tile.toggleSelected();
+        tile.toggleSelected();
       } else {
-	const selectedTile = selected[0];
-	if (selectedTile === tile) {
-	  tile.toggleSelected();
-	} else if (!tile.matches(selectedTile)) {
-	  selectedTile.toggleSelected();
-	  tile.toggleSelected();
-	} else {
-	  // deselect selected tile
-	  selectedTile.toggleSelected();
-	  // move the tiles to the discard tableau
-	  this.game.tileDiscard(selectedTile);
-	  this.game.tileDiscard(tile);
+        const selectedTile = selected[0];
+        if (selectedTile === tile) {
+          tile.toggleSelected();
+        } else if (!tile.matches(selectedTile)) {
+          selectedTile.toggleSelected();
+          tile.toggleSelected();
+        } else {
+          // deselect selected tile
+          selectedTile.toggleSelected();
+          // move the tiles to the discard tableau
+          this.game.tileDiscard(selectedTile);
+          this.game.tileDiscard(tile);
 
-	  // decide if the game is over or stuck
-	  if (this.playTiles.length === 0) {
-	    // there are no tiles in the play tableau
-	    this.gameIsCompleted = true;
-	  } else {
-	    // see if there are any tile matches left to play
-	    this.gameIsDeadlocked = true;
-	    for (const tile1 of this.canPlayTiles) {
-	      for (const tile2 of this.canPlayTiles) {
-		if (tile1 !== tile2 && tile1.tileId < tile2.tileId && tile1.matches(tile2)) {
-		  this.gameIsDeadlocked = false;
-		  break;
-		}
-	      }
-	      if (!this.gameIsDeadlocked) { break; }
-	    }
-	  }
-	}
+          // decide if the game is over or stuck
+          if (this.playTiles.length === 0) {
+            // there are no tiles in the play tableau
+            this.gameIsCompleted = true;
+          } else {
+            // see if there are any tile matches left to play
+            this.gameIsDeadlocked = true;
+            for (const tile1 of this.canPlayTiles) {
+              for (const tile2 of this.canPlayTiles) {
+                if (
+                  tile1 !== tile2 &&
+                  tile1.tileId < tile2.tileId &&
+                  tile1.matches(tile2)
+                ) {
+                  this.gameIsDeadlocked = false;
+                  break;
+                }
+              }
+              if (!this.gameIsDeadlocked) {
+                break;
+              }
+            }
+          }
+        }
       }
       this.updateTiles();
     }
@@ -194,16 +200,20 @@ export class Play {
     this.gameIsDeadlocked = false;
     this.gameIsCompleted = false;
     switch (msg) {
-      case 'new': this.dealGame(+1); break;
-      case 'restart': this.dealGame(+0); break;
+      case 'new':
+        this.dealGame(+1);
+        break;
+      case 'restart':
+        this.dealGame(+0);
+        break;
       case 'undo':
         this.game
-            .tileUndiscardOrderList(this.discardTiles.length - 2)
-            .forEach(t => t.undiscard());
-	break;
+          .tileUndiscardOrderList(this.discardTiles.length - 2)
+          .forEach(t => t.undiscard());
+        break;
       default:
-	console.log(`unknown message from dialog "${msg}"`);
-	break;
+        console.log(`unknown message from dialog "${msg}"`);
+        break;
     }
   }
 }

@@ -3,7 +3,7 @@ import { customElement } from 'lit/decorators.js';
 
 import './pages/mahjong/mahjong-app.js';
 
-import { router } from './router';
+import { router } from './router.js';
 
 @customElement('app-index')
 export class AppIndex extends LitElement {
@@ -11,7 +11,7 @@ export class AppIndex extends LitElement {
     :root {
       --font-family: sans-serif;
     }
-    
+
     main {
       padding-left: 16px;
       padding-right: 16px;
@@ -21,10 +21,9 @@ export class AppIndex extends LitElement {
 
   firstUpdated() {
     router.addEventListener('route-changed', () => {
-      if ("startViewTransition" in document) {
+      if ('startViewTransition' in document) {
         (document as any).startViewTransition(() => this.requestUpdate());
-      }
-      else {
+      } else {
         this.requestUpdate();
       }
     });

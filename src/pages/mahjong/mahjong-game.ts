@@ -93,9 +93,9 @@ export class Game {
         slot => {
           const newSlot = slot;
           newSlot.tile = this.discardSlots[newSlot.slotId].tile;
-	  if (newSlot.tile !== undefined) {
-	    newSlot.tile.discardSlot = newSlot;
-	  }
+          if (newSlot.tile !== undefined) {
+            newSlot.tile.discardSlot = newSlot;
+          }
           return newSlot;
         }
       );

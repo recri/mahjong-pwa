@@ -39,26 +39,32 @@ export class MahjongTileView extends LitElement {
     this.play.tileKeyPress(evt, this.tile);
   }
 
+  /* eslint class-methods-use-this: ["error", { "exceptMethods": ["tileFocus"] }] */
   tileFocus(evt: FocusEvent) {
     if (evt.target instanceof HTMLButtonElement && evt.target.tabIndex < 0) {
-      evt.target.blur()
+      evt.target.blur();
     }
   }
 
   override render() {
     const style = css`
-      .bg { opacity: ${this.selected ? 0 : 1}; }
-      .mg { opacity: ${this.selected ? 1 : 0}; }
+      .bg {
+        opacity: ${this.selected ? 0 : 1};
+      }
+      .mg {
+        opacity: ${this.selected ? 1 : 0};
+      }
     `;
     /* FIX.ME - div needs keyboard action keys, space newline */
     return html` <style>
         ${style}
       </style>
-      <div role="button"
+      <div
+        role="button"
         class="tile"
         aria-label="${this.tile.title}"
         tabindex="${this.disabled ? -1 : 0}"
-        ${this.disabled?'disabled':''}
+        ${this.disabled ? 'disabled' : ''}
         @click=${this.tileTap}
         @keypress=${this.tileKeyPress}
         @focus=${this.tileFocus}

@@ -143,5 +143,5 @@ export const Constant = {
   qianHeight,
   background,
   tileNames,
-  tileTitles
+  tileTitles,
 };

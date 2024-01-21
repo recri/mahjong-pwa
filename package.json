@@ -18,23 +18,47 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@shoelace-style/shoelace": "^2.4.0",
     "@thepassle/app-tools": "^0.9.9",
-    "lit": "^2.7.2",
+    "lit": "*",
     "urlpattern-polyfill": "^7.0.0",
     "workbox-build": "^6.5.2",
     "workbox-core": "^6.5.2",
     "workbox-precaching": "^6.5.2"
   },
   "devDependencies": {
-    "typescript": "^5.0.4",
+    "typescript": "*",
     "vite": "^4.2.1",
-    "vite-plugin-pwa": "^0.14.7"
+    "vite-plugin-pwa": "^0.14.7",
+    "@open-wc/eslint-config": "^9.2.1",
     "@typescript-eslint/eslint-plugin": "*",
     "@typescript-eslint/parser": "*",
     "eslint": "*",
     "eslint-config-prettier": "*",
-    "prettier": "^2.4.1",
+    "prettier": "^2.4.1"
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+      "@open-wc",
+      "prettier"
+    ],
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "rules": {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error"
+      ],
+      "import/no-unresolved": "off",
+      "import/extensions": [
+        "error",
+        "always",
+        {
+          "ignorePackages": true
+        }
+      ]
+    }
   },
   "prettier": {
     "tabWidth": 2,
@@ -44,6 +68,7 @@
     "quoteProps": "consistent",
     "trailingComma": "es5",
     "endOfLine": "crlf",
-    "bracketSpacing": true
+    "bracketSpacing": true,
+    "arrowParens": "avoid"
   }
 }
