@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>mahjong-pwab</title>
+
+  <base href="/" />
+
+  <meta name="viewport"
+    content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+  <meta name="description" content="This is a mahjong-pwab app" />
+
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#181818" />
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f3f3f3" />
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="mahjong-pwab" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  <meta name="pwa-starter-template-identity" content="pwa-starter"/>
+
+  <link rel="icon" href="/assets/icon-32x32.png" type="image/png" />
+
+  <link rel="manifest" href="/manifest.json" />
+
+  <script type="module" src="/src/app-index.ts"></script>
+  <style>
+    html, body {
+      font-family: var(--font-family);
+      padding: 0;
+      margin: 0;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+    
+      html,
+      body {
+        background-color: #323657;
+        color: white;
+      }
+    }
+    
+    @media (prefers-color-scheme: light) {
+  
+      html,
+      body {
+        background-color: #323657;
+        color: gray;
+      }
+    }
+</style>    
+</head>
+
+<body>
+
+  <app-index></app-index>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register(
+        '/sw.js'
+      );
+    }
+  </script>
+
+</body>
+
+</html>

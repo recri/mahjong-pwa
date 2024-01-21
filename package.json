@@ -1,0 +1,49 @@
+{
+  "name": "mahjong-pwab",
+  "version": "0.0.1",
+  "description": "A starter kit for building PWAs!",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
+    "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
+    "dev-server": "vite --open",
+    "dev": "npm run dev-server",
+    "dev-task": "vite",
+    "deploy": "npx @azure/static-web-apps-cli login --no-use-keychain && npx @azure/static-web-apps-cli deploy",
+    "build": "tsc && vite build",
+    "start-dev": "vite preview",
+    "start": "npm run dev",
+    "start-remote": "vite --host"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@shoelace-style/shoelace": "^2.4.0",
+    "@thepassle/app-tools": "^0.9.9",
+    "lit": "^2.7.2",
+    "urlpattern-polyfill": "^7.0.0",
+    "workbox-build": "^6.5.2",
+    "workbox-core": "^6.5.2",
+    "workbox-precaching": "^6.5.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4",
+    "vite": "^4.2.1",
+    "vite-plugin-pwa": "^0.14.7"
+    "@typescript-eslint/eslint-plugin": "*",
+    "@typescript-eslint/parser": "*",
+    "eslint": "*",
+    "eslint-config-prettier": "*",
+    "prettier": "^2.4.1",
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": true,
+    "quoteProps": "consistent",
+    "trailingComma": "es5",
+    "endOfLine": "crlf",
+    "bracketSpacing": true
+  }
+}
