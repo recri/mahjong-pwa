@@ -1,6 +1,7 @@
 /**
  */
-
+import { Constant } from './constant.js';
+import { stride } from './utility.js';
 import { Tile, makeTiles } from './mahjong-tile.js';
 import { Slot, makePlaySlots, makeDiscardSlots } from './mahjong-slot.js';
 
@@ -88,29 +89,26 @@ export class Game {
 
   remodelDiscardSlots(newDiscardRows: number) {
     if (newDiscardRows !== this.discardRows) {
-      this.discardRows = newDiscardRows;
-      const newDiscardSlots: Slot[] = makeDiscardSlots(newDiscardRows).map(
-        slot => {
-          const newSlot = slot;
-          newSlot.tile = this.discardSlots[newSlot.slotId].tile;
-          if (newSlot.tile !== undefined) {
-            newSlot.tile.discardSlot = newSlot;
-          }
-          return newSlot;
-        }
-      );
-      this.discardSlots = newDiscardSlots;
-    }
-  }
-
-  rearrangeDiscardSlots(arrange: string) {
-    if (this.discardArrange !== arrange) {
-      this.discardArrange = arrange;
       const discardedTilesInDiscardOrder: Tile[] = this.discardTiles.sort(
         (tile1, tile2) => tile1.discardOrder - tile2.discardOrder
       );
       // undiscard the played tiles
       discardedTilesInDiscardOrder.forEach(tile => tile.undiscard());
+      this.discardRows = newDiscardRows;
+      this.discardSlots = makeDiscardSlots(newDiscardRows);
+      // rediscard the played tiles
+      discardedTilesInDiscardOrder.forEach(tile => this.tileDiscard(tile));
+    }
+  }
+
+  rearrangeDiscardSlots(arrange: string) {
+    if (this.discardArrange !== arrange) {
+      const discardedTilesInDiscardOrder: Tile[] = this.discardTiles.sort(
+        (tile1, tile2) => tile1.discardOrder - tile2.discardOrder
+      );
+      // undiscard the played tiles
+      discardedTilesInDiscardOrder.forEach(tile => tile.undiscard());
+      this.discardArrange = arrange;
       // rediscard the played tiles
       discardedTilesInDiscardOrder.forEach(tile => this.tileDiscard(tile));
     }
@@ -138,6 +136,40 @@ export class Game {
     return this.tileUndiscardOrderList(0);
   }
 
+  // remap slotIds to fill from left-to-right and top-to-bottom
+  remap(discardId: number): Slot {
+    if (discardId < 0 || discardId > 35) {
+      console.log(`invalid discardId ${discardId}`);
+      return undefined;
+    }
+    if (this.discardRows === 3) {
+      // reverse the order of layout in each row
+      const rem = discardId % 12;
+      const div = Math.floor(discardId / 12);
+      const map = div * 12 + (11 - rem);
+      return this.discardSlots[map];
+    } else if (this.discardRows === 12) {
+      // reverse the order of layout in each column
+      // and reverse the order of the columns
+      const rem = discardId % 12;
+      // eslint-disable no-bitwise
+      const div = [2,1,0][Math.floor(discardId / 12)];
+      // eslint-enable no-bitwise
+      const map = div * 12 + rem;
+      if (this.discardArrange === 'byTileOrder') {
+	// and now exchange N with W and S with E
+	if (map === 34) return this.discardSlots[21]; // N -> W
+	if (map === 21) return this.discardSlots[34]; // W -> N
+	if (map === 23) return this.discardSlots[10]; // E -> S
+	if (map === 10) return this.discardSlots[23]; // S -> E
+      }
+      return this.discardSlots[map];
+      // return discardId;
+    }
+    console.log(`unknown discardRows ${this.discardRows}`);
+    return undefined;
+  }
+  
   // find the discard slot id for a discarded tile
   pickDiscardSlot(tile: Tile): Slot | undefined {
     // discards stack similar tiles in piles of four
@@ -153,17 +185,17 @@ export class Game {
     // decide where to put the first tile of this sort
     switch (this.discardArrange) {
       case 'byDiscardOrder': {
-        const lastTile = this.discardTiles
-          .filter(t => t.discardSlot!.slotId < 36)
-          .pop();
-        return this.discardSlots[
-          lastTile === undefined ? 0 : lastTile.discardSlot!.slotId + 1
-        ];
+	for (const slotId of stride(0, 36-1, 1)) {
+	  if (this.remap(slotId).isDiscardSlotEmpty) {
+            return this.remap(slotId);
+	  }
+	}
+	console.log(`fell out of slot search`);
+	return undefined;
       }
       case 'byTileOrder':
       case 'noDiscard':
-        return this.discardSlots[tile.face];
-
+	return this.remap(tile.face);
       default:
         console.log(`unknown arrangement ${this.discardArrange}`);
         return undefined;
