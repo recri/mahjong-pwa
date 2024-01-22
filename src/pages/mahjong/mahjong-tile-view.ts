@@ -21,6 +21,7 @@ export class MahjongTileView extends LitElement {
       margin: none;
       background-color: transparent;
     }
+    :focus { outline-width: 2px; }
   `;
 
   @property({ type: Object }) play!: Play;

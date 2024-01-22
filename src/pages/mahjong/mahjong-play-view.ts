@@ -55,6 +55,13 @@ export class MahjongPlayView extends LitElement {
         top: ${tile.playSlot.y * this.scale}px;
         width: ${Constant.tileWidth * this.scale}px;
         height: ${Constant.tileHeight * this.scale}px;
+/*
+padding-top: 0px;
+padding-right: 0px
+padding-bottom: ${-Constant.bottomMargin * this.scale}px;
+padding-left: ${-Constant.leftMargin * this.scale}px;
+// didn't work with margin either.
+*/
       }
     `;
   }
