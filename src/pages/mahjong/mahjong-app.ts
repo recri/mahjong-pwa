@@ -21,10 +21,6 @@ export class MahjongApp extends LitElement {
       padding: 0px;
       font-size: 4vmax;
     }
-    /* the p is added here to silence lighthouse NO_LCP error */
-    p {
-      color: #323657;
-    }
   `;
 
   @property({ type: Object }) play: Play;
@@ -120,17 +116,14 @@ export class MahjongApp extends LitElement {
   //
 
   override render() {
-    const margin = 5;
+    const padding = 0;
     const { width, height } = this;
     const style = css`
       mahjong-view {
-        position: absolute;
-        top: ${margin}px;
-        left: ${margin}px;
-        width: ${width - 2 * margin};
-        height: ${height - 2 * margin};
+        padding: ${padding}px;
+        width: ${width}px;
+        height: ${height}px;
       }
-p { color: 
     `;
 
     if (this.play.gameIsCompleted) {
@@ -139,18 +132,18 @@ p { color:
     if (this.play.gameIsDeadlocked) {
       this.dialogShowModal(this.youlose);
     }
-
+    // console.log(`app render width ${width} height ${height}`);
     return html`
       <style>
         ${style}
       </style>
-      <p>lorem ipsum</p>
+
       <mahjong-view
         .play=${this.play}
         .playTiles=${this.playTiles}
         .discardTiles=${this.discardTiles}
-        .width=${width - 2 * margin}
-        .height=${height - 2 * margin}
+        .width=${width}
+        .height=${height}
       ></mahjong-view>
 
       <dialog id="youlose" modal>

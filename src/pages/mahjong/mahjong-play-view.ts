@@ -28,7 +28,7 @@ export class MahjongPlayView extends LitElement {
 
   @property({ type: Array }) tiles!: Tile[];
 
-  @property({ type: Number }) scale!: number;
+  @property({ type: Number }) scale!: number = 1;
 
   renderTileView(tile: Tile) {
     if (tile === undefined || tile.playSlot === undefined) {
@@ -51,11 +51,11 @@ export class MahjongPlayView extends LitElement {
 
     return css`
       #t${tile.tileId} {
-        left: ${tile.playSlot.x * this.scale}px;
-        top: ${tile.playSlot.y * this.scale}px;
+        left: ${this.offsetLeft + tile.playSlot.x * this.scale}px;
+        top: ${this.offsetTop + tile.playSlot.y * this.scale}px;
         width: ${Constant.tileWidth * this.scale}px;
         height: ${Constant.tileHeight * this.scale}px;
-/*
+        /*
 padding-top: 0px;
 padding-right: 0px
 padding-bottom: ${-Constant.bottomMargin * this.scale}px;
@@ -67,6 +67,10 @@ padding-left: ${-Constant.leftMargin * this.scale}px;
   }
 
   override render() {
+    this.scale = Math.min(
+      this.offsetWidth / Constant.playWidth,
+      this.offsetHeight / Constant.playHeight
+    );
     const style = css`
       mahjong-tile-view {
         width: ${Constant.tileWidth * this.scale}px;
@@ -74,6 +78,10 @@ padding-left: ${-Constant.leftMargin * this.scale}px;
         position: absolute;
       }
     `;
+    // console.log(`play render width ${this.width} height ${this.height}`);
+    // console.log(`play render minWidth ${this.minWidth} minHeight ${this.minHeight}`);
+    // console.log(`play render maxWidth ${this.maxWidth} maxHeight ${this.maxHeight}`);
+    // console.log(`play render ${this.offsetLeft} ${this.offsetTop} ${this.offsetWidth} ${this.offsetHeight}`);
     return html`
       <style>
         ${style}

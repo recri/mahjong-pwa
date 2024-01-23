@@ -24,8 +24,6 @@ export class MahjongMenuView extends LitElement {
 
   @property({ type: Object }) play!: Play;
 
-  @property({ type: Object }) scale!: number;
-
   @property({ type: String }) discardarrange!: string;
 
   /* eslint class-methods-use-this: ["error", { "exceptMethods": ["menuTap"] }] */
@@ -45,8 +43,9 @@ export class MahjongMenuView extends LitElement {
   }
 
   override render() {
-    const edge = this.scale * 0.6;
-    const padding = this.scale * 0.2;
+    const scale = this.offsetHeight / Constant.tileWidth;
+    const edge = Constant.tileWidth * 0.6 * scale;
+    const padding = Constant.tileWidth * 0.2 * scale;
     const style = css`
       button,
       .dropbtn {
@@ -83,18 +82,11 @@ export class MahjongMenuView extends LitElement {
         z-index: 1;
       }
 
-      .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-      }
-
       .show {
         display: block;
       }
     `;
-
+    // console.log(`menu render ${this.offsetLeft} ${this.offsetTop} ${this.offsetWidth} ${this.offsetHeight}`);
     return html`
       <style>
         ${style}

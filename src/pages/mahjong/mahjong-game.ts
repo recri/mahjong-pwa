@@ -1,6 +1,5 @@
 /**
  */
-import { Constant } from './constant.js';
 import { stride } from './utility.js';
 import { Tile, makeTiles } from './mahjong-tile.js';
 import { Slot, makePlaySlots, makeDiscardSlots } from './mahjong-slot.js';
@@ -148,20 +147,21 @@ export class Game {
       const div = Math.floor(discardId / 12);
       const map = div * 12 + (11 - rem);
       return this.discardSlots[map];
-    } else if (this.discardRows === 12) {
+    }
+    if (this.discardRows === 12) {
       // reverse the order of layout in each column
       // and reverse the order of the columns
       const rem = discardId % 12;
       // eslint-disable no-bitwise
-      const div = [2,1,0][Math.floor(discardId / 12)];
+      const div = [2, 1, 0][Math.floor(discardId / 12)];
       // eslint-enable no-bitwise
       const map = div * 12 + rem;
       if (this.discardArrange === 'byTileOrder') {
-	// and now exchange N with W and S with E
-	if (map === 34) return this.discardSlots[21]; // N -> W
-	if (map === 21) return this.discardSlots[34]; // W -> N
-	if (map === 23) return this.discardSlots[10]; // E -> S
-	if (map === 10) return this.discardSlots[23]; // S -> E
+        // and now exchange N with W and S with E
+        if (map === 34) return this.discardSlots[21]; // N -> W
+        if (map === 21) return this.discardSlots[34]; // W -> N
+        if (map === 23) return this.discardSlots[10]; // E -> S
+        if (map === 10) return this.discardSlots[23]; // S -> E
       }
       return this.discardSlots[map];
       // return discardId;
@@ -169,7 +169,7 @@ export class Game {
     console.log(`unknown discardRows ${this.discardRows}`);
     return undefined;
   }
-  
+
   // find the discard slot id for a discarded tile
   pickDiscardSlot(tile: Tile): Slot | undefined {
     // discards stack similar tiles in piles of four
@@ -185,17 +185,17 @@ export class Game {
     // decide where to put the first tile of this sort
     switch (this.discardArrange) {
       case 'byDiscardOrder': {
-	for (const slotId of stride(0, 36-1, 1)) {
-	  if (this.remap(slotId).isDiscardSlotEmpty) {
+        for (const slotId of stride(0, 36 - 1, 1)) {
+          if (this.remap(slotId).isDiscardSlotEmpty) {
             return this.remap(slotId);
-	  }
-	}
-	console.log(`fell out of slot search`);
-	return undefined;
+          }
+        }
+        console.log(`fell out of slot search`);
+        return undefined;
       }
       case 'byTileOrder':
       case 'noDiscard':
-	return this.remap(tile.face);
+        return this.remap(tile.face);
       default:
         console.log(`unknown arrangement ${this.discardArrange}`);
         return undefined;

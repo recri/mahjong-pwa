@@ -210,7 +210,7 @@ export class Play {
         this.game
           .tileUndiscardOrderList(this.discardTiles.length - 2)
           .forEach(t => t.undiscard());
-	this.updateTiles();
+        this.updateTiles();
         break;
       default:
         console.log(`unknown message from dialog "${msg}"`);
