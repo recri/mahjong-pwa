@@ -37,8 +37,6 @@ export class MahjongView extends LitElement {
   @property({ type: Array }) discardTiles!: Tile[];
 
   resolveOrientation() {
-    // console.log(`portrait disc ${Constant.portraitDiscardAspect} play ${Constant.playAspect}`);
-    // console.log(`landscape disc ${Constant.landscapeDiscardAspect} play ${Constant.playAspect}`);
     const width = this.offsetWidth - 2 * this.offsetLeft;
     const height = this.offsetHeight - 2 * this.offsetTop;
     const obj = { gap: 10 };
@@ -50,50 +48,66 @@ export class MahjongView extends LitElement {
       // main aspect inverted to height/width
       // the discard and play tableau will be drawn at the same width
       const mainAspect =
-        1 / Constant.portraitDiscardAspect +
-        1 / Constant.playAspect;
+        1 / Constant.portraitDiscardAspect + 1 / Constant.playAspect;
       // menu, discard, and play size in per cent
       obj.menuPct = 5;
-      obj.discardPct = Math.floor((95 / Constant.portraitDiscardAspect) / mainAspect);
-      obj.playPct = Math.floor((95 / Constant.playAspect) / mainAspect);
+      obj.discardPct = Math.floor(
+        95 / Constant.portraitDiscardAspect / mainAspect
+      );
+      obj.playPct = Math.floor(95 / Constant.playAspect / mainAspect);
       // compute the height specified by the per cent
       obj.contentHeight = height - 2 * obj.gap;
-      obj.discardHeight = obj.contentHeight * obj.discardPct / 100;
-      obj.playHeight = obj.contentHeight * obj.playPct / 100;
+      obj.discardHeight = (obj.contentHeight * obj.discardPct) / 100;
+      obj.playHeight = (obj.contentHeight * obj.playPct) / 100;
       // compute the scales
-      obj.discardScale = Math.min(width/Constant.portraitDiscardWidth,
-			      obj.discardHeight/Constant.portraitDiscardHeight);
-      obj.playScale = Math.min(width/Constant.playWidth,
-			       obj.playHeight / Constant.playHeight);
+      obj.discardScale = Math.min(
+        width / Constant.portraitDiscardWidth,
+        obj.discardHeight / Constant.portraitDiscardHeight
+      );
+      obj.playScale = Math.min(
+        width / Constant.playWidth,
+        obj.playHeight / Constant.playHeight
+      );
       // now adjust the width with padding so it fits in the height
-      obj.paddingLeft = Math.max(0, (width - obj.playScale * Constant.playWidth) / 2);
+      obj.paddingLeft = Math.max(
+        0,
+        (width - obj.playScale * Constant.playWidth) / 2
+      );
       obj.paddingTop = 0;
     } else {
       this.play.remodelDiscardSlots(Constant.landscapeDiscardRows);
-      // landscape orientation      
+      // landscape orientation
       obj.orientation = 'landscape';
-      obj.direction = 'row'
+      obj.direction = 'row';
       // main aspect, tableaux drawn at same height
-      const mainAspect =
-	Constant.landscapeDiscardAspect + Constant.playAspect;
+      const mainAspect = Constant.landscapeDiscardAspect + Constant.playAspect;
       // menu, discard, and play size in per cent
       obj.menuPct = 5;
-      obj.discardPct = Math.floor((95 * Constant.landscapeDiscardAspect) / mainAspect);
+      obj.discardPct = Math.floor(
+        (95 * Constant.landscapeDiscardAspect) / mainAspect
+      );
       obj.playPct = Math.floor((95 * Constant.playAspect) / mainAspect);
       // compute the width specified by the per cent
       obj.contentWidth = width - 2 * obj.gap;
-      obj.discardWidth = obj.contentWidth * obj.discardPct / 100;
-      obj.playWidth = obj.contentWidth * obj.playPct / 100;
+      obj.discardWidth = (obj.contentWidth * obj.discardPct) / 100;
+      obj.playWidth = (obj.contentWidth * obj.playPct) / 100;
       // compute the scales
-      obj.discardScale = Math.min(height/Constant.landscapeDiscardHeight,
-			      obj.discardWidth/Constant.landscapeDiscardWidth);
-      obj.playScale = Math.min(height/Constant.playHeight,
-			       obj.playWidth / Constant.playWidth);
+      obj.discardScale = Math.min(
+        height / Constant.landscapeDiscardHeight,
+        obj.discardWidth / Constant.landscapeDiscardWidth
+      );
+      obj.playScale = Math.min(
+        height / Constant.playHeight,
+        obj.playWidth / Constant.playWidth
+      );
       // now adjust the height with padding so it fits in the width
-      obj.paddingTop = Math.max(0, (height - obj.playScale * Constant.playHeight) / 2);
+      obj.paddingTop = Math.max(
+        0,
+        (height - obj.playScale * Constant.playHeight) / 2
+      );
       obj.paddingLeft = 0;
     }
-    obj.style =  css`
+    obj.style = css`
       :host {
         flex-direction: ${unsafeCSS(obj.direction)};
         gap: ${unsafeCSS(obj.gap)}px;
@@ -112,10 +126,6 @@ export class MahjongView extends LitElement {
   }
 
   override render() {
-    // console.log(`view render ${this.play.playTiles.length} playTiles`);
-    // console.log(`view render ${this.play.discardTiles.length} discardTiles`);
-    // console.log(`view render ${this.width}x${this.height}`);
-    console.log(`view render ${this.offsetLeft} ${this.offsetTop} ${this.offsetWidth} ${this.offsetHeight}`);
     const obj = this.resolveOrientation();
     return html`
       <style>

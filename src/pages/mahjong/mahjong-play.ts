@@ -191,13 +191,13 @@ export class Play {
         this.rearrangeDiscardSlots(id);
         break;
       case 'youWin':
-	this.gameIsCompleted = true;
+        this.gameIsCompleted = true;
         this.updateTiles();
-	break;
+        break;
       case 'youLose':
-	this.gameIsDeadlocked = true;
+        this.gameIsDeadlocked = true;
         this.updateTiles();
-	break;
+        break;
       default:
         console.log(`??selectTap(${id})??`);
     }

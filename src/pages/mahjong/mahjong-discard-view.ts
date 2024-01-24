@@ -54,8 +54,12 @@ export class MahjongDiscardView extends LitElement {
     }
     return css`
       #t${tile.tileId} {
-        left: ${this.offsetLeft + this.paddingLeft + tile.discardSlot.x * this.scale}px;
-        top: ${this.offsetTop + this.paddingTop + tile.discardSlot.y * this.scale}px;
+        left: ${this.offsetLeft +
+        this.paddingLeft +
+        tile.discardSlot.x * this.scale}px;
+        top: ${this.offsetTop +
+        this.paddingTop +
+        tile.discardSlot.y * this.scale}px;
       }
     `;
   }
@@ -68,8 +72,6 @@ export class MahjongDiscardView extends LitElement {
         height: ${Constant.tileHeight * this.scale}px;
       }
     `;
-    // console.log(`discard render width ${this.width} height ${this.height}`);
-    console.log(`disc render ${this.offsetLeft} ${this.offsetTop} ${this.offsetWidth} ${this.offsetHeight} * ${this.scale}`);
     return html`
       <style>
         ${style}

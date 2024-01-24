@@ -47,7 +47,8 @@ export class MahjongMenuView extends LitElement {
   }
 
   override render() {
-    const scale = Math.min(this.offsetHeight, this.offsetWidth) / Constant.tileWidth;
+    const scale =
+      Math.min(this.offsetHeight, this.offsetWidth) / Constant.tileWidth;
     const edge = Constant.tileWidth * 0.6 * scale;
     const padding = Constant.tileWidth * 0.2 * scale;
     const style = css`
@@ -80,9 +81,9 @@ export class MahjongMenuView extends LitElement {
         position: relative;
         background-color: ${unsafeCSS(Constant.background)};
         color: white;
-	padding: 5px;
-	border-width: 2px;
-	border-color: white;
+        padding: 5px;
+        border-width: 2px;
+        border-color: white;
         left: 32px;
         min-width: 160px;
         overflow: auto;
@@ -101,7 +102,6 @@ export class MahjongMenuView extends LitElement {
         display: block;
       }
     `;
-    // console.log(`menu render ${this.offsetLeft} ${this.offsetTop} ${this.offsetWidth} ${this.offsetHeight}`);
     return html`
       <style>
         ${style}
@@ -118,38 +118,38 @@ export class MahjongMenuView extends LitElement {
         </button>
         <div id="myDropdown" class="dropdown-content">
           <button id="restartGame" class="menu-item" @click=${this.selectTap}>
-            Restart Game
-          </button><br />
+            Restart Game</button
+          ><br />
           <button id="nextGame" class="menu-item" @click=${this.selectTap}>
-            Next Game
-          </button><br />
+            Next Game</button
+          ><br />
           <button id="previousGame" class="menu-item" @click=${this.selectTap}>
-            Previous Game
-          </button><br />
+            Previous Game</button
+          ><br />
           <button id="randomGame" class="menu-item" @click=${this.selectTap}>
-            Random Game
-          </button><br />
+            Random Game</button
+          ><br />
           <hr />
           <button id="byTileOrder" class="menu-item" @click=${this.selectTap}>
-            ${this.check('byTileOrder')} Discard By Tile
-          </button><br />
+            ${this.check('byTileOrder')} Discard By Tile</button
+          ><br />
           <button
             id="byDiscardOrder"
             class="menu-item"
             @click=${this.selectTap}
           >
-            ${this.check('byDiscardOrder')} Discard By Order
-          </button><br />
+            ${this.check('byDiscardOrder')} Discard By Order</button
+          ><br />
           <button id="noDiscard" class="menu-item" @click=${this.selectTap}>
-            ${this.check('noDiscard')} No Discard
-          </button><br />
+            ${this.check('noDiscard')} No Discard</button
+          ><br />
           <hr />
           <button id="youWin" class="menu-item" @click=${this.selectTap}>
-            Trigger You Win
-          </button><br />
+            Trigger You Win</button
+          ><br />
           <button id="youLose" class="menu-item" @click=${this.selectTap}>
-            Trigger You Lose
-          </button><br />
+            Trigger You Lose</button
+          ><br />
         </div>
       </div>
     `;

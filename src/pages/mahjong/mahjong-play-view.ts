@@ -55,8 +55,12 @@ export class MahjongPlayView extends LitElement {
 
     return css`
       #t${tile.tileId} {
-        left: ${this.offsetLeft + this.paddingLeft + tile.playSlot.x * this.scale}px;
-        top: ${this.offsetTop + this.paddingTop + tile.playSlot.y * this.scale}px;
+        left: ${this.offsetLeft +
+        this.paddingLeft +
+        tile.playSlot.x * this.scale}px;
+        top: ${this.offsetTop +
+        this.paddingTop +
+        tile.playSlot.y * this.scale}px;
       }
     `;
   }
@@ -69,10 +73,6 @@ export class MahjongPlayView extends LitElement {
         height: ${Constant.tileHeight * this.scale}px;
       }
     `;
-    // console.log(`play render width ${this.width} height ${this.height}`);
-    // console.log(`play render minWidth ${this.minWidth} minHeight ${this.minHeight}`);
-    // console.log(`play render maxWidth ${this.maxWidth} maxHeight ${this.maxHeight}`);
-    console.log(`play render ${this.offsetLeft} ${this.offsetTop} ${this.offsetWidth} ${this.offsetHeight} * ${this.scale}`);
     return html`
       <style>
         ${style}

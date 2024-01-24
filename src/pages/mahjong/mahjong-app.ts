@@ -15,6 +15,7 @@ import './mahjong-view.js';
 @customElement('mahjong-app')
 export class MahjongApp extends LitElement {
   static padding = 10;
+
   static override styles = css`
     :host {
       display: block;
@@ -117,8 +118,8 @@ export class MahjongApp extends LitElement {
   override render() {
     const style = css`
       mahjong-view {
-        width: ${this.width-2*MahjongApp.padding}px;
-        height: ${this.height-2*MahjongApp.padding}px;
+        width: ${this.width - 2 * MahjongApp.padding}px;
+        height: ${this.height - 2 * MahjongApp.padding}px;
       }
     `;
 
