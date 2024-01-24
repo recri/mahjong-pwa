@@ -22,12 +22,14 @@ const portraitDiscardCols = 36 / portraitDiscardRows;
 const portraitDiscardWidth = portraitDiscardCols * faceWidth + 4 * leftMargin;
 const portraitDiscardHeight =
   (portraitDiscardRows + 2 * discardSlotJitter) * faceHeight + 4 * bottomMargin;
+const portraitDiscardAspect = portraitDiscardWidth / portraitDiscardHeight;
 const landscapeDiscardRows = 12;
 const landscapeDiscardCols = 36 / landscapeDiscardRows;
 const landscapeDiscardWidth =
   (landscapeDiscardCols + 2 * discardSlotJitter) * faceWidth + 4 * leftMargin;
 const landscapeDiscardHeight =
   landscapeDiscardRows * faceHeight + 4 * bottomMargin;
+const landscapeDiscardAspect = landscapeDiscardWidth / landscapeDiscardHeight;
 
 // other
 const qianWidth = 19.09;
@@ -134,9 +136,11 @@ export const Constant = {
   portraitDiscardCols,
   portraitDiscardWidth,
   portraitDiscardHeight,
+  portraitDiscardAspect,
   landscapeDiscardRows,
   landscapeDiscardWidth,
   landscapeDiscardHeight,
+  landscapeDiscardAspect,
 
   // other
   qianWidth,

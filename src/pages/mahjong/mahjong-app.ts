@@ -14,12 +14,12 @@ import './mahjong-view.js';
  */
 @customElement('mahjong-app')
 export class MahjongApp extends LitElement {
+  static padding = 10;
   static override styles = css`
     :host {
       display: block;
       border: none;
-      padding: 0px;
-      font-size: 4vmax;
+      padding: ${MahjongApp.padding}px;
     }
   `;
 
@@ -114,15 +114,11 @@ export class MahjongApp extends LitElement {
   //
   //
   //
-
   override render() {
-    const padding = 0;
-    const { width, height } = this;
     const style = css`
       mahjong-view {
-        padding: ${padding}px;
-        width: ${width}px;
-        height: ${height}px;
+        width: ${this.width-2*MahjongApp.padding}px;
+        height: ${this.height-2*MahjongApp.padding}px;
       }
     `;
 
@@ -132,7 +128,6 @@ export class MahjongApp extends LitElement {
     if (this.play.gameIsDeadlocked) {
       this.dialogShowModal(this.youlose);
     }
-    // console.log(`app render width ${width} height ${height}`);
     return html`
       <style>
         ${style}
@@ -142,8 +137,8 @@ export class MahjongApp extends LitElement {
         .play=${this.play}
         .playTiles=${this.playTiles}
         .discardTiles=${this.discardTiles}
-        .width=${width}
-        .height=${height}
+        .width=${this.width}
+        .height=${this.height}
       ></mahjong-view>
 
       <dialog id="youlose" modal>

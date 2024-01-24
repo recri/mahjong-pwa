@@ -190,6 +190,14 @@ export class Play {
       case 'noDiscard':
         this.rearrangeDiscardSlots(id);
         break;
+      case 'youWin':
+	this.gameIsCompleted = true;
+        this.updateTiles();
+	break;
+      case 'youLose':
+	this.gameIsDeadlocked = true;
+        this.updateTiles();
+	break;
       default:
         console.log(`??selectTap(${id})??`);
     }

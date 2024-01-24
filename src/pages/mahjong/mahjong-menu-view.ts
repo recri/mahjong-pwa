@@ -1,7 +1,7 @@
 /**
  */
 
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { Constant } from './constant.js';
@@ -26,6 +26,10 @@ export class MahjongMenuView extends LitElement {
 
   @property({ type: String }) discardarrange!: string;
 
+  @property({ type: Number }) paddingLeft!: number;
+
+  @property({ type: Number }) paddingTop!: number;
+
   /* eslint class-methods-use-this: ["error", { "exceptMethods": ["menuTap"] }] */
   menuTap() {
     this.shadowRoot!.getElementById('myDropdown')!.classList.toggle('show');
@@ -43,18 +47,15 @@ export class MahjongMenuView extends LitElement {
   }
 
   override render() {
-    const scale = this.offsetHeight / Constant.tileWidth;
+    const scale = Math.min(this.offsetHeight, this.offsetWidth) / Constant.tileWidth;
     const edge = Constant.tileWidth * 0.6 * scale;
     const padding = Constant.tileWidth * 0.2 * scale;
     const style = css`
-      button,
       .dropbtn {
         margin: 0px;
         border: none;
         padding: 0px;
         background-color: transparent;
-        color: gray;
-        cursor: pointer;
       }
 
       .svgbtn {
@@ -64,24 +65,38 @@ export class MahjongMenuView extends LitElement {
       svg {
         width: ${edge};
         height: ${edge};
-        fill: gray;
+        fill: white;
       }
 
       .dropdown {
-        position: relative;
+        position: absolute;
         display: inline-block;
+        top: ${this.offsetTop + this.paddingTop}px;
+        left: ${this.offsetLeft + this.paddingLeft}px;
       }
 
       .dropdown-content {
         display: none;
-        position: absolute;
-        background-color: #f1f1f1;
+        position: relative;
+        background-color: ${unsafeCSS(Constant.background)};
+        color: white;
+	padding: 5px;
+	border-width: 2px;
+	border-color: white;
+        left: 32px;
         min-width: 160px;
         overflow: auto;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         z-index: 1;
       }
 
+      .dropdown-content button {
+        margin: 0px;
+        border: none;
+        padding: 0px;
+        background-color: ${unsafeCSS(Constant.background)};
+        color: white;
+      }
       .show {
         display: block;
       }
@@ -103,31 +118,38 @@ export class MahjongMenuView extends LitElement {
         </button>
         <div id="myDropdown" class="dropdown-content">
           <button id="restartGame" class="menu-item" @click=${this.selectTap}>
-            Restart Game</button
-          ><br />
+            Restart Game
+          </button><br />
           <button id="nextGame" class="menu-item" @click=${this.selectTap}>
             Next Game
-          </button>
+          </button><br />
           <button id="previousGame" class="menu-item" @click=${this.selectTap}>
             Previous Game
-          </button>
+          </button><br />
           <button id="randomGame" class="menu-item" @click=${this.selectTap}>
             Random Game
-          </button>
+          </button><br />
           <hr />
           <button id="byTileOrder" class="menu-item" @click=${this.selectTap}>
-            ${this.check('byTileOrder')}Discard By Tile
-          </button>
+            ${this.check('byTileOrder')} Discard By Tile
+          </button><br />
           <button
             id="byDiscardOrder"
             class="menu-item"
             @click=${this.selectTap}
           >
-            ${this.check('byDiscardOrder')}Discard By Order
-          </button>
+            ${this.check('byDiscardOrder')} Discard By Order
+          </button><br />
           <button id="noDiscard" class="menu-item" @click=${this.selectTap}>
-            ${this.check('noDiscard')}No Discard
-          </button>
+            ${this.check('noDiscard')} No Discard
+          </button><br />
+          <hr />
+          <button id="youWin" class="menu-item" @click=${this.selectTap}>
+            Trigger You Win
+          </button><br />
+          <button id="youLose" class="menu-item" @click=${this.selectTap}>
+            Trigger You Lose
+          </button><br />
         </div>
       </div>
     `;
