@@ -28,7 +28,7 @@ export class MahjongPlayView extends LitElement {
 
   @property({ type: Array }) tiles!: Tile[];
 
-  @property({ type: Number }) scale!: number = 1;
+  @property({ type: Number }) scale!: number;
 
   @property({ type: Number }) paddingLeft!: number;
 

@@ -136,7 +136,7 @@ export class Game {
   }
 
   // remap slotIds to fill from left-to-right and top-to-bottom
-  remap(discardId: number): Slot {
+  remap(discardId: number): Slot|undefined {
     if (discardId < 0 || discardId > 35) {
       console.log(`invalid discardId ${discardId}`);
       return undefined;
@@ -186,7 +186,7 @@ export class Game {
     switch (this.discardArrange) {
       case 'byDiscardOrder': {
         for (const slotId of stride(0, 36 - 1, 1)) {
-          if (this.remap(slotId).isDiscardSlotEmpty) {
+          if (this.remap(slotId)!.isDiscardSlotEmpty) {
             return this.remap(slotId);
           }
         }

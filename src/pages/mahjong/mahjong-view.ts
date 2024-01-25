@@ -11,6 +11,28 @@ import './mahjong-discard-view.js';
 import './mahjong-play-view.js';
 
 /**
+ * An object type used to communicate page shape
+ */
+interface CSSOptions {
+  gap: number;
+  orientation?: string;
+  direction?: string;
+  menuPct?: number;
+  discardPct?: number;
+  playPct?: number;
+  contentHeight?: number;
+  discardHeight?: number;
+  playHeight?: number;
+  contentWidth?: number;
+  discardWidth?: number;
+  playWidth?: number;
+  discardScale?: number;
+  playScale?: number;
+  paddingLeft?: number;
+  paddingTop?: number;
+  style?: any;
+};
+/**
  * the top level view web component for mahjong
  * hosts the three view web components of the game
  * and the class which adapts the game model itself
@@ -39,7 +61,7 @@ export class MahjongView extends LitElement {
   resolveOrientation() {
     const width = this.offsetWidth - 2 * this.offsetLeft;
     const height = this.offsetHeight - 2 * this.offsetTop;
-    const obj = { gap: 10 };
+    const obj: CSSOptions = { gap: 10 };
     if (width <= height) {
       this.play.remodelDiscardSlots(Constant.portraitDiscardRows);
       // portrait
