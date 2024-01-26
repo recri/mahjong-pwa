@@ -39,11 +39,9 @@ export class Game {
     this._playTiles = this.playSlots
       .filter(s => s.tile !== undefined && s.tile.isInPlay)
       .map(s => s.tile!);
-    this._canPlayTiles = this.playTiles.filter(t => t.canPlay);
     this._discardTiles = this.discardSlots
       .filter(s => s.tile !== undefined)
       .map(s => s.tile!);
-    this._canUndiscardTiles = this.discardTiles.filter(t => t.canUndiscard);
   }
 
   // tiles for occupied play slots sorted in slot order
@@ -56,14 +54,8 @@ export class Game {
     return this._playTiles;
   }
 
-  // tiles for playable play slots sorted in slot order
-  private _canPlayTiles!: Tile[];
-
   get canPlayTiles(): Tile[] {
-    if (Tile.updated) {
-      this._updateTiles();
-    }
-    return this._canPlayTiles;
+    return this.playTiles.filter(t => t.canPlay);
   }
 
   // tiles for occupied discard slots sorted in slot order
@@ -74,16 +66,6 @@ export class Game {
       this._updateTiles();
     }
     return this._discardTiles;
-  }
-
-  // tiles for undiscardable discard slots sorted in slot order
-  private _canUndiscardTiles!: Tile[];
-
-  get canUndiscardTiles(): Tile[] {
-    if (Tile.updated) {
-      this._updateTiles();
-    }
-    return this._canUndiscardTiles;
   }
 
   remodelDiscardSlots(newDiscardRows: number) {
@@ -136,7 +118,7 @@ export class Game {
   }
 
   // remap slotIds to fill from left-to-right and top-to-bottom
-  remap(discardId: number): Slot|undefined {
+  remap(discardId: number): Slot | undefined {
     if (discardId < 0 || discardId > 35) {
       console.log(`invalid discardId ${discardId}`);
       return undefined;

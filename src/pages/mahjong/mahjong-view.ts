@@ -31,7 +31,7 @@ interface CSSOptions {
   paddingLeft?: number;
   paddingTop?: number;
   style?: any;
-};
+}
 /**
  * the top level view web component for mahjong
  * hosts the three view web components of the game

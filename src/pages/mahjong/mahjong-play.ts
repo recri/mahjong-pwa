@@ -36,10 +36,6 @@ export class Play {
     return this.game.canPlayTiles;
   }
 
-  get canUndiscardTiles(): Tile[] {
-    return this.game.canUndiscardTiles;
-  }
-
   constructor() {
     this.game = new Game();
     this.deal = new GameDeal();
@@ -127,8 +123,9 @@ export class Play {
           } else {
             // see if there are any tile matches left to play
             this.gameIsDeadlocked = true;
-            for (const tile1 of this.canPlayTiles) {
-              for (const tile2 of this.canPlayTiles) {
+            const { canPlayTiles } = this;
+            for (const tile1 of canPlayTiles) {
+              for (const tile2 of canPlayTiles) {
                 if (
                   tile1 !== tile2 &&
                   tile1.tileId < tile2.tileId &&
