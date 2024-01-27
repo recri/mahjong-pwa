@@ -33,7 +33,7 @@ export const router = new Router({
   routes: [
     {
       path: resolveRouterPath(),
-      title: 'Home',
+      title: 'Mahjong',
       render: () => html`<mahjong-app></mahjong-app>`,
     },
   ],
