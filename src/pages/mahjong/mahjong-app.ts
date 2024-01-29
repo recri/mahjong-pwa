@@ -30,6 +30,8 @@ export class MahjongApp extends LitElement {
 
   @property({ type: Array }) discardTiles!: Tile[];
 
+  @property({ type: Object }) selectedTile!: Tile | undefined;
+
   @property({ type: Number }) width: number;
 
   @property({ type: Number }) height: number;
@@ -122,7 +124,7 @@ export class MahjongApp extends LitElement {
         height: ${this.height - 2 * MahjongApp.padding}px;
       }
     `;
-
+    // console.log('app render');
     if (this.play.gameIsCompleted) {
       this.dialogShowModal(this.youwin);
     }
@@ -138,6 +140,7 @@ export class MahjongApp extends LitElement {
         .play=${this.play}
         .playTiles=${this.playTiles}
         .discardTiles=${this.discardTiles}
+        .selectedTile=${this.selectedTile}
         .width=${this.width}
         .height=${this.height}
       ></mahjong-view>

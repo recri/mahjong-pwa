@@ -58,6 +58,8 @@ export class MahjongView extends LitElement {
 
   @property({ type: Array }) discardTiles!: Tile[];
 
+  @property({ type: Object }) selectedTile!: Tile | undefined;
+
   resolveOrientation() {
     const width = this.offsetWidth - 2 * this.offsetLeft;
     const height = this.offsetHeight - 2 * this.offsetTop;
@@ -149,6 +151,7 @@ export class MahjongView extends LitElement {
 
   override render() {
     const obj = this.resolveOrientation();
+    // console.log('view render');
     return html`
       <style>
         ${obj.style}
@@ -169,6 +172,7 @@ export class MahjongView extends LitElement {
       <mahjong-play-view
         .play=${this.play}
         .tiles=${this.playTiles}
+        .selectedTile=${this.selectedTile}
         .scale=${obj.playScale}
         .paddingLeft=${obj.paddingLeft}
         .paddingTop=${obj.paddingTop}

@@ -30,7 +30,7 @@ export class MahjongTileView extends LitElement {
 
   @property({ type: Object }) tile!: Tile;
 
-  @property({ type: Boolean }) selected: boolean = false;
+  @property({ type: Object }) selectedTile!: Tile | undefined;
 
   @property({ type: Boolean }) disabled: boolean = false;
 
@@ -52,10 +52,10 @@ export class MahjongTileView extends LitElement {
   override render() {
     const style = css`
       .bg {
-        opacity: ${this.selected ? 0 : 1};
+        opacity: ${this.selectedTile === this.tile ? 0 : 1};
       }
       .mg {
-        opacity: ${this.selected ? 1 : 0};
+        opacity: ${this.selectedTile === this.tile ? 1 : 0};
       }
     `;
     /* FIX.ME - div needs keyboard action keys, space newline */

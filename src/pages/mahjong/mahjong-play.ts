@@ -20,6 +20,8 @@ export class Play {
 
   gameApp!: MahjongApp | undefined;
 
+  selectedTile: Tile | undefined;
+
   get discardArrange(): string {
     return this.game.discardArrange;
   }
@@ -56,8 +58,16 @@ export class Play {
 
   updateTiles() {
     if (this.gameApp !== undefined) {
-      this.gameApp.playTiles = this.playTiles;
-      this.gameApp.discardTiles = this.discardTiles;
+      if (this.gameApp.playTiles !== this.playTiles) {
+        this.gameApp.playTiles = this.playTiles;
+      }
+      if (this.gameApp.discardTiles !== this.discardTiles) {
+        this.gameApp.discardTiles = this.discardTiles;
+      }
+      if (this.gameApp.selectedTile !== this.selectedTile) {
+        this.gameApp.selectedTile = this.selectedTile;
+        // console.log('updated selectedTile');
+      }
     }
   }
 
@@ -96,22 +106,31 @@ export class Play {
     console.log(`tileKeyPress(${evt}, ${tile})`);
   }
 
+  // toggle the selected tile
+  toggleSelected(tile: Tile) {
+    if (tile.isSelected) {
+      this.selectedTile = undefined;
+    } else {
+      this.selectedTile = tile;
+    }
+    tile.toggleSelected();
+  }
+
   //  tap on a tile in the play tableau
   playTileTap(tile: Tile) {
     if (tile !== undefined && tile.canPlay) {
-      const selected = this.playTiles.filter(tile1 => tile1.isSelected);
-      if (selected.length === 0) {
-        tile.toggleSelected();
+      if (this.selectedTile === undefined) {
+        this.toggleSelected(tile);
       } else {
-        const selectedTile = selected[0];
+        const { selectedTile } = this;
         if (selectedTile === tile) {
-          tile.toggleSelected();
+          this.toggleSelected(tile);
         } else if (!tile.matches(selectedTile)) {
-          selectedTile.toggleSelected();
-          tile.toggleSelected();
+          this.toggleSelected(selectedTile);
+          this.toggleSelected(tile);
         } else {
           // deselect selected tile
-          selectedTile.toggleSelected();
+          this.toggleSelected(selectedTile);
           // move the tiles to the discard tableau
           this.game.tileDiscard(selectedTile);
           this.game.tileDiscard(tile);
@@ -149,9 +168,8 @@ export class Play {
   //  tap on a tile in the discard tableau
   discardTileTap(tile: Tile) {
     // clear any selection
-    const selectedTile = this.game.tiles.find(t => t.isSelected);
-    if (selectedTile !== undefined) {
-      selectedTile.toggleSelected();
+    if (this.selectedTile !== undefined) {
+      this.toggleSelected(this.selectedTile);
     }
     if (tile.canUndiscard) {
       // undiscard to the touched tile and the one under it

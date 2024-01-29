@@ -28,6 +28,8 @@ export class MahjongPlayView extends LitElement {
 
   @property({ type: Array }) tiles!: Tile[];
 
+  @property({ type: Object }) selectedTile!: Tile | undefined;
+
   @property({ type: Number }) scale!: number;
 
   @property({ type: Number }) paddingLeft!: number;
@@ -44,7 +46,7 @@ export class MahjongPlayView extends LitElement {
       .play=${this.play}
       .tile=${tile}
       .disabled="${!tile.canPlay}"
-      .selected=${tile.isSelected}
+      .selectedTile=${this.selectedTile}
     ></mahjong-tile-view>`;
   }
 

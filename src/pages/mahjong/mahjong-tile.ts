@@ -33,7 +33,6 @@ export class Tile {
 
   toggleSelected() {
     this.isSelected = !this.isSelected;
-    Tile.updated = true;
   }
 
   get name() {
