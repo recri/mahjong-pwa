@@ -22,7 +22,7 @@ export class Play {
 
   selectedTile: Tile | undefined;
 
-  get discardArrange(): string {
+  get discardArrange(): boolean {
     return this.game.discardArrange;
   }
 
@@ -58,16 +58,15 @@ export class Play {
 
   updateTiles() {
     if (this.gameApp !== undefined) {
-      if (this.gameApp.playTiles !== this.playTiles) {
-        this.gameApp.playTiles = this.playTiles;
-      }
-      if (this.gameApp.discardTiles !== this.discardTiles) {
-        this.gameApp.discardTiles = this.discardTiles;
-      }
-      if (this.gameApp.selectedTile !== this.selectedTile) {
-        this.gameApp.selectedTile = this.selectedTile;
-        // console.log('updated selectedTile');
-      }
+	// this could be done with
+	// if (this.gameApp[prop] !== this[prop]) this.gameApp[prop] = this[prop];
+	// in a loop over prop names
+      if (this.gameApp.playTiles !== this.playTiles) { this.gameApp.playTiles = this.playTiles; }
+      if (this.gameApp.discardTiles !== this.discardTiles) { this.gameApp.discardTiles = this.discardTiles; }
+      if (this.gameApp.selectedTile !== this.selectedTile) { this.gameApp.selectedTile = this.selectedTile; }
+	if (this.gameApp.discardArrange !== this.discardArrange) { this.gameApp.discardArrange = this.discardArrange; }
+	if (this.gameApp.gameIsCompleted !== this.gameIsCompleted) { this.gameApp.gameIsCompleted = this.gameIsCompleted; }
+	if (this.gameApp.gameIsDeadlocked !== this.gameIsDeadlocked) { this.gameApp.gameIsDeadlocked = this.gameIsDeadlocked; }
     }
   }
 
@@ -75,11 +74,6 @@ export class Play {
 
   remodelDiscardSlots(rows: number) {
     this.game.remodelDiscardSlots(rows);
-    this.updateTiles();
-  }
-
-  rearrangeDiscardSlots(id: string) {
-    this.game.rearrangeDiscardSlots(id);
     this.updateTiles();
   }
 
@@ -200,10 +194,9 @@ export class Play {
         this.dealGame(+this.random());
         break;
       }
-      case 'byTileOrder':
-      case 'byDiscardOrder':
-      case 'noDiscard':
-        this.rearrangeDiscardSlots(id);
+      case 'discardArrange':
+        this.game.rearrangeDiscardSlots();
+        this.updateTiles();
         break;
       case 'youWin':
         this.gameIsCompleted = true;
@@ -214,7 +207,7 @@ export class Play {
         this.updateTiles();
         break;
       default:
-        console.log(`??selectTap(${id})??`);
+        console.log(`??selectTap('${id}')??`);
     }
   }
 
@@ -223,13 +216,19 @@ export class Play {
     this.gameIsDeadlocked = false;
     this.gameIsCompleted = false;
     switch (msg) {
-      case 'new':
+      case 'randomGame':
+        this.dealGame(+this.random());
+        break;
+      case 'previousGame':
+        this.dealGame(-1);
+        break;
+      case 'nextGame':
         this.dealGame(+1);
         break;
-      case 'restart':
+      case 'restartGame':
         this.dealGame(+0);
         break;
-      case 'undo':
+      case 'undoLastMove':
         this.game
           .tileUndiscardOrderList(this.discardTiles.length - 2)
           .forEach(t => t.undiscard());

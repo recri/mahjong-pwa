@@ -50,6 +50,8 @@ export class MahjongView extends LitElement {
 
   @property({ type: Object }) play!: Play;
 
+  @property({ type: Number }) gameNumber!: number;
+
   @property({ type: Number }) width!: number;
 
   @property({ type: Number }) height!: number;
@@ -59,6 +61,12 @@ export class MahjongView extends LitElement {
   @property({ type: Array }) discardTiles!: Tile[];
 
   @property({ type: Object }) selectedTile!: Tile | undefined;
+
+    @property({ type: Boolean }) discardArrange: boolean;
+    
+    @property({ type: Boolean }) gameIsCompleted: boolean;
+    
+    @property({ type: Boolean }) gameIsDeadlocked: boolean;
 
   resolveOrientation() {
     const width = this.offsetWidth - 2 * this.offsetLeft;
@@ -152,15 +160,17 @@ export class MahjongView extends LitElement {
   override render() {
     const obj = this.resolveOrientation();
     // console.log('view render');
+    // console.log(`view render ${this.play.discardArrange}`);
     return html`
       <style>
         ${obj.style}
       </style>
       <mahjong-menu-view
         .play=${this.play}
-        .discardarrange=${this.play.discardArrange}
+	.discardArrange=${this.discardArrange}
         .paddingLeft=${obj.paddingLeft}
         .paddingTop=${obj.paddingTop}
+	.scale=${obj.playScale}
       ></mahjong-menu-view>
       <mahjong-discard-view
         .play=${this.play}

@@ -1,7 +1,7 @@
 {
-  "name": "mahjong-pwab",
+  "name": "mahjong",
   "version": "0.0.1",
-  "description": "A starter kit for building PWAs!",
+  "description": "A Mahjong PWA",
   "main": "index.js",
   "scripts": {
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",

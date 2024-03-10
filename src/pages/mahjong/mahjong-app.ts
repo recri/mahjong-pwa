@@ -1,8 +1,11 @@
 /**
  */
 
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+
+import { Constant } from './constant.js';
+import { getIconImage } from './mahjong-icon-images.js';
 import { Tile } from './mahjong-tile.js';
 import { Play } from './mahjong-play.js';
 import './mahjong-view.js';
@@ -32,6 +35,12 @@ export class MahjongApp extends LitElement {
 
   @property({ type: Object }) selectedTile!: Tile | undefined;
 
+  @property({ type: Boolean }) discardArrange: boolean;
+    
+  @property({ type: Boolean }) gameIsCompleted: boolean;
+    
+  @property({ type: Boolean }) gameIsDeadlocked: boolean;
+    
   @property({ type: Number }) width: number;
 
   @property({ type: Number }) height: number;
@@ -41,6 +50,9 @@ export class MahjongApp extends LitElement {
     this.play = new Play();
     this.playTiles = this.play.playTiles;
     this.discardTiles = this.play.discardTiles;
+    this.discardArrange = false;
+    this.gameIsCompleted = false;
+    this.gameIsDeadlocked = false;
     this.width = 200;
     this.height = 200;
   }
@@ -83,52 +95,77 @@ export class MahjongApp extends LitElement {
     }
   }
 
-  dialogClose(dialog: any, msg: string) {
+  dialogClose(dialog: any, e: MouseEvent) {
     if (dialog instanceof HTMLDialogElement) {
       dialog.close();
     }
-    this.play.dialog(msg);
+    if (e !== null && e.target !== null && e.target instanceof Element) {
+	let { target } = e;
+	while ( ! target.id) target = target.parentElement;
+	this.play.dialog(target.id) ;
+    }
   }
 
-  youlose_undo() {
-    this.dialogClose(this.youlose, 'undo');
+  youloseTap(e: MouseEvent) {
+      this.dialogClose(this.youlose, e);
   }
 
-  youlose_new() {
-    this.dialogClose(this.youlose, 'new');
-  }
-
-  youlose_restart() {
-    this.dialogClose(this.youlose, 'restart');
-  }
-
-  youwin_undo() {
-    this.dialogClose(this.youwin, 'undo');
-  }
-
-  youwin_new() {
-    this.dialogClose(this.youwin, 'new');
-  }
-
-  youwin_restart() {
-    this.dialogClose(this.youwin, 'restart');
+  youwinTap(e: MouseEvent) {
+    this.dialogClose(this.youwin, e);
   }
 
   //
   //
   //
   override render() {
+      const edge = 50;
     const style = css`
       mahjong-view {
         width: ${this.width - 2 * MahjongApp.padding}px;
         height: ${this.height - 2 * MahjongApp.padding}px;
       }
+      dialog {
+        position: relative;
+        background-color: ${unsafeCSS(Constant.background)};
+        color: white;
+        padding: 5px;
+        border-width: 2px;
+        border-color: white;
+        left: 32px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+      }
+      dialog > div {
+	max-width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+      }
+      dialog > div > svg {
+        width: ${2*edge}px;
+        height: ${2*edge}px;
+	stroke: white;
+	stroke-width: 4;
+      }
+      dialog > div > button {
+        margin: 0px;
+        border: none;
+        padding: 0px;
+        background-color: ${unsafeCSS(Constant.background)};
+      }
+      dialog > div > button > svg {
+        width: ${edge}px;
+        height: ${edge}px;
+	stroke: white;
+	stroke-width: 3;
+	margin: none;
+      }
     `;
     // console.log('app render');
-    if (this.play.gameIsCompleted) {
+    if (this.gameIsCompleted) {
       this.dialogShowModal(this.youwin);
     }
-    if (this.play.gameIsDeadlocked) {
+    if (this.gameIsDeadlocked) {
       this.dialogShowModal(this.youlose);
     }
     return html`
@@ -138,7 +175,9 @@ export class MahjongApp extends LitElement {
 
       <mahjong-view
         .play=${this.play}
-        .playTiles=${this.playTiles}
+	.gameNumber=${this.play.gameNumber}
+	.discardArrange=${this.discardArrange}
+	.playTiles=${this.playTiles}
         .discardTiles=${this.discardTiles}
         .selectedTile=${this.selectedTile}
         .width=${this.width}
@@ -146,31 +185,72 @@ export class MahjongApp extends LitElement {
       ></mahjong-view>
 
       <dialog id="youlose" modal>
-        <h2>There are no more moves.</h2>
+	<div>
+          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
+	    ${getIconImage('youLose')}
+	  </svg>
+	</div>
         <div class="buttons">
-          <button raised dialog-confirm @click=${() => this.youlose_undo()}>
-            Undo
+          <button raised dialog-confirm id="previousGame" @click=${this.youloseTap}>
+          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
+            ${getIconImage('previousGame')}
+          </svg>
+	  </button>
+          <button raised dialog-confirm id="undoLastMove" @click=${this.youloseTap}>
+          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
+            ${getIconImage('goBack')}
+          </svg>
           </button>
-          <button raised dialog-confirm @click=${() => this.youlose_restart()}>
-            Restart
+          <button raised dialog-confirm id="randomGame" @click=${this.youloseTap}>
+          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
+            ${getIconImage('randomGame')}
+          </svg>
           </button>
-          <button raised dialog-confirm @click=${() => this.youlose_new()}>
-            New Game
+          <button raised dialog-confirm id="restartGame" @click=${this.youloseTap}>
+          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
+            ${getIconImage('restartGame')}
+          </svg>
+          </button>
+          <button raised dialog-confirm id="nextGame" @click=${this.youloseTap}>
+          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
+            ${getIconImage('nextGame')}
+          </svg>
           </button>
         </div>
       </dialog>
 
       <dialog id="youwin" modal>
-        <h2>You have won the game</h2>
+	<div>
+          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
+            ${getIconImage('youWin')}
+          </svg>
+	</div>
         <div class="buttons">
-          <button raised dialog-confirm @click=${() => this.youwin_undo()}>
-            Undo
+          <button raised dialog-confirm id="previousGame" @click=${this.youwinTap}>
+          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
+            ${getIconImage('previousGame')}
+          </svg>
+	  </button>
+          <button raised dialog-confirm id="undoLastMove" @click=${this.youwinTap}>
+          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
+            ${getIconImage('goBack')}
+          </svg>
           </button>
-          <button raised dialog-confirm @click=${() => this.youwin_restart()}>
-            Restart
+          <button raised dialog-confirm id="randomGame" @click=${this.youwinTap}>
+          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
+            ${getIconImage('randomGame')}
+          </svg>
           </button>
-          <button raised dialog-confirm @click=${() => this.youwin_new()}>
-            New Game
+          </button>
+          <button raised dialog-confirm id="restartGame" @click=${this.youwinTap}>
+          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
+            ${getIconImage('restartGame')}
+          </svg>
+          </button>
+          <button raised dialog-confirm id="nextGame" @click=${this.youwinTap}>
+          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
+            ${getIconImage('nextGame')}
+          </svg>
           </button>
         </div>
       </dialog>

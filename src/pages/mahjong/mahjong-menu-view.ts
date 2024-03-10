@@ -1,11 +1,9 @@
-/**
- */
 
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { Constant } from './constant.js';
-import { getTileImage } from './mahjong-tile-images.js';
+import { getIconImage } from './mahjong-icon-images.js';
 import { Play } from './mahjong-play.js';
 
 /**
@@ -24,8 +22,10 @@ export class MahjongMenuView extends LitElement {
 
   @property({ type: Object }) play!: Play;
 
-  @property({ type: String }) discardarrange!: string;
+  @property({ type: Boolean }) discardArrange!: boolean;
 
+  @property({ type: Number }) scale: number;
+    
   @property({ type: Number }) paddingLeft!: number;
 
   @property({ type: Number }) paddingTop!: number;
@@ -35,22 +35,26 @@ export class MahjongMenuView extends LitElement {
     this.shadowRoot!.getElementById('myDropdown')!.classList.toggle('show');
   }
 
-  selectTap(e: MouseEvent) {
-    if (e !== null && e.target !== null && e.target instanceof Element) {
-      this.play.selectTap(e.target.id);
-    }
+  menuUntap() {
     this.shadowRoot!.getElementById('myDropdown')!.classList.toggle('show');
   }
 
-  check(match: string) {
-    return match !== this.discardarrange ? '\u2610' : '\u2611';
+  selectTap(e: MouseEvent) {
+      if (e !== null && e.target !== null && e.target instanceof Element) {
+	  let { target } = e;
+	  while ( ! target.id) {
+	      // console.log(`selectTap ${target.tagName} has no id`);
+	      target = target.parentElement;
+	  }
+	  // console.log(`selectTap ${target.tagName} has id ${target.id}`);
+	  this.play.selectTap(target.id);
+      }
+      this.menuUntap()
   }
 
   override render() {
-    const scale =
-      Math.min(this.offsetHeight, this.offsetWidth) / Constant.tileWidth;
-    const edge = Constant.tileWidth * 0.6 * scale;
-    const padding = Constant.tileWidth * 0.2 * scale;
+    const edge = Constant.tileWidth * this.scale;
+    const padding = Constant.tileWidth * 0.2 * this.scale;
     const style = css`
       .dropbtn {
         margin: 0px;
@@ -67,6 +71,8 @@ export class MahjongMenuView extends LitElement {
         width: ${edge};
         height: ${edge};
         fill: white;
+	stroke: white;
+	stroke-width: 3;
       }
 
       .dropdown {
@@ -85,7 +91,7 @@ export class MahjongMenuView extends LitElement {
         border-width: 2px;
         border-color: white;
         left: 32px;
-        min-width: 160px;
+	min-width: ${edge}px;
         overflow: auto;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         z-index: 1;
@@ -102,54 +108,87 @@ export class MahjongMenuView extends LitElement {
         display: block;
       }
     `;
+    // console.log(`menu view render ${this.discardArrange}`);
     return html`
       <style>
         ${style}
       </style>
       <div class="dropdown">
         <button @click=${this.menuTap} class="dropbtn svgbutton" title="menu">
-          <svg
-            viewBox="0 0 ${Constant.qianWidth} ${Constant.qianHeight}"
+          <svg 
+            viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
             width=${edge}
             height=${edge}
           >
-            ${getTileImage('qian')}
+            ${getIconImage('hamburgerMenu')}
           </svg>
         </button>
         <div id="myDropdown" class="dropdown-content">
-          <button id="restartGame" class="menu-item" @click=${this.selectTap}>
-            Restart Game</button
-          ><br />
-          <button id="nextGame" class="menu-item" @click=${this.selectTap}>
-            Next Game</button
-          ><br />
-          <button id="previousGame" class="menu-item" @click=${this.selectTap}>
-            Previous Game</button
-          ><br />
-          <button id="randomGame" class="menu-item" @click=${this.selectTap}>
-            Random Game</button
-          ><br />
-          <hr />
-          <button id="byTileOrder" class="menu-item" @click=${this.selectTap}>
-            ${this.check('byTileOrder')} Discard By Tile</button
-          ><br />
-          <button
-            id="byDiscardOrder"
-            class="menu-item"
-            @click=${this.selectTap}
-          >
-            ${this.check('byDiscardOrder')} Discard By Order</button
-          ><br />
-          <button id="noDiscard" class="menu-item" @click=${this.selectTap}>
-            ${this.check('noDiscard')} No Discard</button
-          ><br />
-          <hr />
-          <button id="youWin" class="menu-item" @click=${this.selectTap}>
-            Trigger You Win</button
-          ><br />
-          <button id="youLose" class="menu-item" @click=${this.selectTap}>
-            Trigger You Lose</button
-          ><br />
+          <button class="menu-item" @click=${this.selectTap}
+	    alt="Restart Game">
+            <svg id="restartGame"
+              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
+              width=${edge} height=${edge}
+            >
+              ${getIconImage('restartGame')}
+            </svg>
+          </button><br />
+          <button class="menu-item" @click=${this.selectTap}
+	    alt="Next Game">
+            <svg id="nextGame"
+              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
+              width=${edge} height=${edge}
+            >
+              ${getIconImage('nextGame')}
+            </svg>
+          </button><br />
+          <button class="menu-item" @click=${this.selectTap}
+            alt="Previous Game">
+            <svg id="previousGame"
+              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
+              width=${edge} height=${edge}
+            >
+              ${getIconImage('previousGame')}
+            </svg>
+          </button><br />
+          <button class="menu-item" @click=${this.selectTap}
+            alt="Random Game">
+            <svg id="randomGame"
+              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
+              width=${edge} height=${edge}
+            >
+              ${getIconImage('randomGame')}
+            </svg>
+          </button><br />
+          <br />
+          <button class="menu-item" @click=${this.selectTap}
+	    alt="Discard Arrangement">
+            <svg id="discardArrange"
+              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
+              width=${edge} height=${edge}
+            >
+	      ${getIconImage(this.discardArrange ? 'uncheckedBox' : 'checkedBox')}
+            </svg>
+          </button><br />
+          <br />
+          <button class="menu-item" @click=${this.selectTap}
+            alt="Trigger You Win">
+            <svg id="youWin"
+              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
+              width=${edge} height=${edge}
+            >
+              ${getIconImage('youWin')}
+            </svg>
+          </button><br />
+          <button class="menu-item" @click=${this.selectTap}
+            alt="Trigger You Lose">
+            <svg id="youLose"
+              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
+              width=${edge} height=${edge}
+            >
+              ${getIconImage('youLose')}
+            </svg>
+          </button><br />
         </div>
       </div>
     `;

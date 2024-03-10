@@ -20,14 +20,14 @@ export class Game {
   discardRows: number;
 
   // how to arrange the discard slots on screen
-  discardArrange: string;
+  discardArrange: boolean;
 
-  // how the discard slots may be arranged
-  discardArrangeOptions = ['byTileOrder', 'byDiscardOrder', 'noDiscard'];
+  // how the discard slots may be arranged, indexed by bool
+  discardArrangeOptions = ['byTileOrder', 'byDiscardOrder'];
 
   constructor() {
     this.discardRows = 3;
-    this.discardArrange = 'byTileOrder';
+    this.discardArrange = false;
     this.tiles = makeTiles();
     this.playSlots = makePlaySlots();
     this.discardSlots = makeDiscardSlots(this.discardRows);
@@ -82,17 +82,16 @@ export class Game {
     }
   }
 
-  rearrangeDiscardSlots(arrange: string) {
-    if (this.discardArrange !== arrange) {
+  rearrangeDiscardSlots() {
       const discardedTilesInDiscardOrder: Tile[] = this.discardTiles.sort(
         (tile1, tile2) => tile1.discardOrder - tile2.discardOrder
       );
       // undiscard the played tiles
       discardedTilesInDiscardOrder.forEach(tile => tile.undiscard());
-      this.discardArrange = arrange;
+      // reset the discard ordering
+      this.discardArrange = ! this.discardArrange;
       // rediscard the played tiles
       discardedTilesInDiscardOrder.forEach(tile => this.tileDiscard(tile));
-    }
   }
 
   //
@@ -138,7 +137,7 @@ export class Game {
       const div = [2, 1, 0][Math.floor(discardId / 12)];
       // eslint-enable no-bitwise
       const map = div * 12 + rem;
-      if (this.discardArrange === 'byTileOrder') {
+      if (this.discardArrange) {
         // and now exchange N with W and S with E
         if (map === 34) return this.discardSlots[21]; // N -> W
         if (map === 21) return this.discardSlots[34]; // W -> N
@@ -165,23 +164,16 @@ export class Game {
     }
 
     // decide where to put the first tile of this sort
-    switch (this.discardArrange) {
-      case 'byDiscardOrder': {
-        for (const slotId of stride(0, 36 - 1, 1)) {
-          if (this.remap(slotId)!.isDiscardSlotEmpty) {
-            return this.remap(slotId);
-          }
+    if (this.discardArrange) {
+      for (const slotId of stride(0, 36 - 1, 1)) {
+        if (this.remap(slotId)!.isDiscardSlotEmpty) {
+          return this.remap(slotId);
         }
-        console.log(`fell out of slot search`);
-        return undefined;
       }
-      case 'byTileOrder':
-      case 'noDiscard':
-        return this.remap(tile.face);
-      default:
-        console.log(`unknown arrangement ${this.discardArrange}`);
-        return undefined;
+      console.log(`fell out of slot search`);
+      return undefined;
     }
+    return this.remap(tile.face);
   }
 
   // deal a new game

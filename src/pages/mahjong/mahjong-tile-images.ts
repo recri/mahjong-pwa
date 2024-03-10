@@ -619,34 +619,7 @@ const tiles: ObjectMap = {
   <g transform="translate(43.5 31.5) scale(.73 .66)">${images.bamboo}</g>
   <g transform="translate(43.5 50.5) scale(.73 .66)">${images.bamboo}</g>
 </g>
-`,
-  // <svg width="19.09mm" height="19.09mm" viewBox="0 0 19.09 19.09">
-  // </svg>
-  qian: svg`
-  <g transform="translate(-55.281906,-116.34134)">
-    <rect
-       x="55.281906"
-       y="116.34134"
-       width="19.091009"
-       height="3.8377812"
-       id="rect592"
-       style="stroke-width:0.264583" />
-    <rect
-       x="55.281906"
-       y="123.99732"
-       width="19.091009"
-       height="3.8380456"
-       id="rect594"
-       style="stroke-width:0.264583" />
-    <rect
-       x="55.281906"
-       y="131.59219"
-       width="19.091009"
-       height="3.8380456"
-       id="rect596"
-       style="stroke-width:0.264583" />
-  </g>
-`,
+`
 };
 
 export const getTileImageNames = (): string[] =>

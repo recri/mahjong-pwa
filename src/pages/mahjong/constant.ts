@@ -32,8 +32,8 @@ const landscapeDiscardHeight =
 const landscapeDiscardAspect = landscapeDiscardWidth / landscapeDiscardHeight;
 
 // other
-const qianWidth = 19.09;
-const qianHeight = 19.09;
+const iconWidth = 70;
+const iconHeight = 70;
 const background = '#323657';
 const tileNames = [
   'bamboo1',
@@ -143,8 +143,8 @@ export const Constant = {
   landscapeDiscardAspect,
 
   // other
-  qianWidth,
-  qianHeight,
+  iconWidth,
+  iconHeight,
   background,
   tileNames,
   tileTitles,
