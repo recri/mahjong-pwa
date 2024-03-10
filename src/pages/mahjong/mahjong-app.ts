@@ -4,8 +4,6 @@
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import { Constant } from './constant.js';
-import { getIconImage } from './mahjong-icon-images.js';
 import { Tile } from './mahjong-tile.js';
 import { Play } from './mahjong-play.js';
 import './mahjong-view.js';
@@ -79,95 +77,17 @@ export class MahjongApp extends LitElement {
   }
   /* eslint-enable wc/guard-super-call */
 
-  // dialogs
-  get youlose(): any {
-    return this.shadowRoot!.getElementById('youlose');
-  }
-
-  get youwin(): any {
-    return this.shadowRoot!.getElementById('youwin');
-  }
-
-  /* eslint class-methods-use-this: ["error", { "exceptMethods": ["dialogShowModal"] }] */
-  dialogShowModal(dialog: any) {
-    if (dialog instanceof HTMLDialogElement) {
-      dialog.showModal();
-    }
-  }
-
-  dialogClose(dialog: any, e: MouseEvent) {
-    if (dialog instanceof HTMLDialogElement) {
-      dialog.close();
-    }
-    if (e !== null && e.target !== null && e.target instanceof Element) {
-	let { target } = e;
-	while ( ! target.id) target = target.parentElement;
-	this.play.dialog(target.id) ;
-    }
-  }
-
-  youloseTap(e: MouseEvent) {
-      this.dialogClose(this.youlose, e);
-  }
-
-  youwinTap(e: MouseEvent) {
-    this.dialogClose(this.youwin, e);
-  }
-
   //
   //
   //
   override render() {
-      const edge = 50;
     const style = css`
       mahjong-view {
         width: ${this.width - 2 * MahjongApp.padding}px;
         height: ${this.height - 2 * MahjongApp.padding}px;
       }
-      dialog {
-        position: relative;
-        background-color: ${unsafeCSS(Constant.background)};
-        color: white;
-        padding: 5px;
-        border-width: 2px;
-        border-color: white;
-        left: 32px;
-        overflow: auto;
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        z-index: 1;
-      }
-      dialog > div {
-	max-width: fit-content;
-	margin-left: auto;
-	margin-right: auto;
-      }
-      dialog > div > svg {
-        width: ${2*edge}px;
-        height: ${2*edge}px;
-	stroke: white;
-	stroke-width: 4;
-      }
-      dialog > div > button {
-        margin: 0px;
-        border: none;
-        padding: 0px;
-        background-color: ${unsafeCSS(Constant.background)};
-      }
-      dialog > div > button > svg {
-        width: ${edge}px;
-        height: ${edge}px;
-	stroke: white;
-	stroke-width: 3;
-	margin: none;
-      }
     `;
     // console.log('app render');
-    if (this.gameIsCompleted) {
-      this.dialogShowModal(this.youwin);
-    }
-    if (this.gameIsDeadlocked) {
-      this.dialogShowModal(this.youlose);
-    }
     return html`
       <style>
         ${style}
@@ -177,6 +97,8 @@ export class MahjongApp extends LitElement {
         .play=${this.play}
 	.gameNumber=${this.play.gameNumber}
 	.discardArrange=${this.discardArrange}
+	.gameIsDeadlocked=${this.gameIsDeadlocked}
+	.gameIsCompleted=${this.gameIsCompleted}
 	.playTiles=${this.playTiles}
         .discardTiles=${this.discardTiles}
         .selectedTile=${this.selectedTile}
@@ -184,76 +106,6 @@ export class MahjongApp extends LitElement {
         .height=${this.height}
       ></mahjong-view>
 
-      <dialog id="youlose" modal>
-	<div>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-	    ${getIconImage('youLose')}
-	  </svg>
-	</div>
-        <div class="buttons">
-          <button raised dialog-confirm id="previousGame" @click=${this.youloseTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('previousGame')}
-          </svg>
-	  </button>
-          <button raised dialog-confirm id="undoLastMove" @click=${this.youloseTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('goBack')}
-          </svg>
-          </button>
-          <button raised dialog-confirm id="randomGame" @click=${this.youloseTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('randomGame')}
-          </svg>
-          </button>
-          <button raised dialog-confirm id="restartGame" @click=${this.youloseTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('restartGame')}
-          </svg>
-          </button>
-          <button raised dialog-confirm id="nextGame" @click=${this.youloseTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('nextGame')}
-          </svg>
-          </button>
-        </div>
-      </dialog>
-
-      <dialog id="youwin" modal>
-	<div>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('youWin')}
-          </svg>
-	</div>
-        <div class="buttons">
-          <button raised dialog-confirm id="previousGame" @click=${this.youwinTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('previousGame')}
-          </svg>
-	  </button>
-          <button raised dialog-confirm id="undoLastMove" @click=${this.youwinTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('goBack')}
-          </svg>
-          </button>
-          <button raised dialog-confirm id="randomGame" @click=${this.youwinTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('randomGame')}
-          </svg>
-          </button>
-          </button>
-          <button raised dialog-confirm id="restartGame" @click=${this.youwinTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('restartGame')}
-          </svg>
-          </button>
-          <button raised dialog-confirm id="nextGame" @click=${this.youwinTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('nextGame')}
-          </svg>
-          </button>
-        </div>
-      </dialog>
     `;
   }
 }
