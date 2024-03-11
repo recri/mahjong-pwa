@@ -1,6 +1,41 @@
+* mahjong to do list
 [ ] put the game number into the url
+	the proposition is that the web app can be launched
+	with a url that specifies the game to be played as
+	a parameter in https://mahjong.elf.org#gameIdentifier
+	a decimal number is a gameIndentifier as an int
+	a hexadecimal number is a gameIdentifier as an int
+	an arbitrary string is a gameIdentifier which is hashed to an int
+	the int, possibly masked to its lower bits, is used as a seed for 
+	the game random number generator.
+   
+	this means that clicking a url with a gameIdentifier will take you
+	to the web app to play the specified game.
+[ ] get the launch url out of the game for sharing
+	I guess it follows that you need to be able to get to the game id
+	of the game you're playing, either by copying the url as a selection
+	or by popping out to a browser hosted window with url controls.
 [ ] stop the bogus focus
+	I get keyboard focus frames on tiles that aren't playable, perhaps
+	an onFocus handler could check the tile playability and blur if
+	not appropriate.
 [ ] look for spurious clicks
+	may not be able to detect this without console logging the click
+	handlers.  I got a select click on the menubutton once.
+[x] fix the flash of wrong color on load.
+	It was a wrong color in the manifest.json
 [ ] make it prettier
+	the icons are a little too brutalist for the rest of the game.
+	I need mahjong themed av control buttons to go with the mahjong
+	themed tiles
+	so the icons could be displayed on mahjong tile buttons
+	Oh, use the ideographic 3 as the hamburger menu button, and then
+	redo the av controls as brush drawn symbols!
 [ ] get a different undo button
-[ ] ?
+[ ] get a copy url to clipboard button
+[ ] make the toplevel menu switch between horizonal and vertical presentation
+	depending on screen orientation.
+[ ] add box outline to the menu frame?
+[ ] add box outlines to the icon buttons?
+[ ] add hover/activation eye candy to the icon buttons?
+
