@@ -24,7 +24,7 @@ export class MahjongMenuView extends LitElement {
 
   @property({ type: Boolean }) discardArrange!: boolean;
 
-  @property({ type: Number }) scale: number;
+  @property({ type: Number }) scale!: number;
     
   @property({ type: Number }) paddingLeft!: number;
 
@@ -42,12 +42,14 @@ export class MahjongMenuView extends LitElement {
   selectTap(e: MouseEvent) {
       if (e !== null && e.target !== null && e.target instanceof Element) {
 	  let { target } = e;
-	  while ( ! target.id) {
+	  while (target && target instanceof Element && ! target.id && target.parentElement) {
 	      // console.log(`selectTap ${target.tagName} has no id`);
 	      target = target.parentElement;
 	  }
 	  // console.log(`selectTap ${target.tagName} has id ${target.id}`);
-	  this.play.selectTap(target.id);
+	  if (target && target.id) {
+	      this.play.selectTap(target.id);
+	  }
       }
       this.menuUntap()
   }

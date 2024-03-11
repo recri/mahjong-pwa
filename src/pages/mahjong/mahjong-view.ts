@@ -63,11 +63,11 @@ export class MahjongView extends LitElement {
 
   @property({ type: Object }) selectedTile!: Tile | undefined;
 
-  @property({ type: Boolean }) discardArrange: boolean;
+  @property({ type: Boolean }) discardArrange!: boolean;
    
-  @property({ type: Boolean }) gameIsCompleted: boolean;
+  @property({ type: Boolean }) gameIsCompleted!: boolean;
    
-  @property({ type: Boolean }) gameIsDeadlocked: boolean;
+  @property({ type: Boolean }) gameIsDeadlocked!: boolean;
 
   resolveOrientation() {
     const width = this.offsetWidth - 2 * this.offsetLeft;
@@ -179,9 +179,15 @@ export class MahjongView extends LitElement {
       dialog.close();
     }
     if (e !== null && e.target !== null && e.target instanceof Element) {
-	let { target } = e;
-	while ( ! target.id) target = target.parentElement;
-	this.play.dialog(target.id) ;
+      let { target } = e;
+	while (target && target instanceof Element && ! target.id && target.parentElement) {
+	    // console.log(`selectTap ${target.tagName} has no id`);
+	    target = target.parentElement;
+	}
+	// console.log(`selectTap ${target.tagName} has id ${target.id}`);
+	if (target && target.id) {
+	    this.play.dialogTap(target.id);
+	}
     }
   }
 
@@ -195,7 +201,7 @@ export class MahjongView extends LitElement {
 
   override render() {
     const obj = this.resolveOrientation();
-    const edge = obj.playScale * Constant.tileWidth;
+    const edge = obj.playScale! * Constant.tileWidth;
     // console.log('view render');
     // console.log(`view render ${this.play.discardArrange}`);
     if (this.gameIsCompleted) {

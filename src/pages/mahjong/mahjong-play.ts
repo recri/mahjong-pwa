@@ -190,10 +190,9 @@ export class Play {
       case 'previousGame':
         this.dealGame(-1);
         break;
-      case 'randomGame': {
+      case 'randomGame':
         this.dealGame(+this.random());
         break;
-      }
       case 'discardArrange':
         this.game.rearrangeDiscardSlots();
         this.updateTiles();
@@ -206,28 +205,6 @@ export class Play {
         this.gameIsDeadlocked = true;
         this.updateTiles();
         break;
-      default:
-        console.log(`??selectTap('${id}')??`);
-    }
-  }
-
-  // result of an end of game dialog
-  dialog(msg: string) {
-    this.gameIsDeadlocked = false;
-    this.gameIsCompleted = false;
-    switch (msg) {
-      case 'randomGame':
-        this.dealGame(+this.random());
-        break;
-      case 'previousGame':
-        this.dealGame(-1);
-        break;
-      case 'nextGame':
-        this.dealGame(+1);
-        break;
-      case 'restartGame':
-        this.dealGame(+0);
-        break;
       case 'undoLastMove':
         this.game
           .tileUndiscardOrderList(this.discardTiles.length - 2)
@@ -235,8 +212,14 @@ export class Play {
         this.updateTiles();
         break;
       default:
-        console.log(`unknown message from dialog "${msg}"`);
-        break;
+        console.log(`??selectTap('${id}')??`);
     }
+  }
+
+  // result of an end of game dialog
+  dialogTap(msg: string) {
+    this.gameIsDeadlocked = false;
+    this.gameIsCompleted = false;
+    this.selectTap(msg);
   }
 }

@@ -1,0 +1,6 @@
+[ ] put the game number into the url
+[ ] stop the bogus focus
+[ ] look for spurious clicks
+[ ] make it prettier
+[ ] get a different undo button
+[ ] ?
