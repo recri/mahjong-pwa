@@ -179,6 +179,7 @@ export class Play {
   }
 
   // tap on a menu item
+  // or tap on a completion dialog item
   selectTap(id: string) {
     switch (id) {
       case 'restartGame':

@@ -26,16 +26,17 @@ export class MahjongMenuView extends LitElement {
 
   @property({ type: Number }) scale!: number;
     
-  @property({ type: Number }) paddingLeft!: number;
-
-  @property({ type: Number }) paddingTop!: number;
-
+  @property({ type: String }) orientation!: string;
+    
   /* eslint class-methods-use-this: ["error", { "exceptMethods": ["menuTap"] }] */
   menuTap() {
-    this.shadowRoot!.getElementById('myDropdown')!.classList.toggle('show');
+      this.shadowRoot!.getElementById('myDropdown')!.classList.toggle('show');
+      // register a mouse tap event listener on the root window
+      // that calls menuUntap, which means this 
   }
 
   menuUntap() {
+      // unregister mouse tap event listener on the root window
     this.shadowRoot!.getElementById('myDropdown')!.classList.toggle('show');
   }
 
@@ -54,61 +55,76 @@ export class MahjongMenuView extends LitElement {
       this.menuUntap()
   }
 
+    static items = [
+	[ 'restartGame', 'Restart Game' ],
+	[ 'nextGame', 'Next Game' ],
+	[ 'previousGame', 'Previous Game' ],
+	[ 'randomGame', 'Random Game' ],
+	[ 'discardArrange', 'Discard Arrange' ],
+	[ 'youWin', 'Trigger You Win' ],
+	[ 'youLose', 'Trigger You Lose' ],
+    ];
+
+  iconImageName(id: string): string {
+    if (id === 'discardArrange')
+      return this.discardArrange ? "checkedBox" : "uncheckedBox"
+    return id;
+  }
+
+  menu() {
+    const { iconWidth, iconHeight } = Constant;
+    const { selectTap } = this;
+    return MahjongMenuView.items.map(([id, alt]) =>
+      html`
+        <button class="menu-item" @click=${selectTap} alt="${alt}" id="${id}">
+          <svg viewBox="0 0 ${iconWidth} ${iconHeight}">
+	    ${getIconImage(this.iconImageName(id))}
+          </svg>
+        </button>
+      `);
+  }
+
   override render() {
     const edge = Constant.tileWidth * this.scale;
     const padding = Constant.tileWidth * 0.2 * this.scale;
     const style = css`
-      .dropbtn {
-        margin: 0px;
-        border: none;
-        padding: 0px;
-        background-color: transparent;
-      }
-
-      .svgbtn {
-        padding: ${padding}px;
-      }
-
-      svg {
-        width: ${edge};
-        height: ${edge};
-        fill: white;
-	stroke: white;
-	stroke-width: 3;
-      }
 
       .dropdown {
-        position: absolute;
+        position: relative;
         display: inline-block;
-        top: ${this.offsetTop + this.paddingTop}px;
-        left: ${this.offsetLeft + this.paddingLeft}px;
+        border: none;
+        margin: 0px;
+        padding: 0px;
+        background-color: ${unsafeCSS(Constant.background)};
+        color: white;
       }
 
       .dropdown-content {
         display: none;
-        position: relative;
-        background-color: ${unsafeCSS(Constant.background)};
-        color: white;
-        padding: 5px;
-        border-width: 2px;
-        border-color: white;
-        left: 32px;
-	min-width: ${edge}px;
-        overflow: auto;
+	top: 16px;
+	left: 16px;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         z-index: 1;
       }
 
-      .dropdown-content button {
-        margin: 0px;
-        border: none;
-        padding: 0px;
-        background-color: ${unsafeCSS(Constant.background)};
-        color: white;
-      }
       .show {
-        display: block;
+        display: inline-block;
       }
+
+      button {
+        border: none;
+        margin: 0px;
+	padding: ${padding}px;
+        background-color: ${unsafeCSS(Constant.background)};
+      }
+
+      svg {
+        width: ${edge}px;
+        height: ${edge}px;
+	stroke: white;
+	stroke-width: 3;
+      }
+
     `;
     // console.log(`menu view render ${this.discardArrange}`);
     return html`
@@ -116,81 +132,13 @@ export class MahjongMenuView extends LitElement {
         ${style}
       </style>
       <div class="dropdown">
-        <button @click=${this.menuTap} class="dropbtn svgbutton" title="menu">
-          <svg 
-            viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
-            width=${edge}
-            height=${edge}
-          >
+        <button @click=${this.menuTap} class="dropdown-button svgbutton" title="menu">
+          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
             ${getIconImage('hamburgerMenu')}
           </svg>
         </button>
         <div id="myDropdown" class="dropdown-content">
-          <button class="menu-item" @click=${this.selectTap}
-	    alt="Restart Game">
-            <svg id="restartGame"
-              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
-              width=${edge} height=${edge}
-            >
-              ${getIconImage('restartGame')}
-            </svg>
-          </button><br />
-          <button class="menu-item" @click=${this.selectTap}
-	    alt="Next Game">
-            <svg id="nextGame"
-              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
-              width=${edge} height=${edge}
-            >
-              ${getIconImage('nextGame')}
-            </svg>
-          </button><br />
-          <button class="menu-item" @click=${this.selectTap}
-            alt="Previous Game">
-            <svg id="previousGame"
-              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
-              width=${edge} height=${edge}
-            >
-              ${getIconImage('previousGame')}
-            </svg>
-          </button><br />
-          <button class="menu-item" @click=${this.selectTap}
-            alt="Random Game">
-            <svg id="randomGame"
-              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
-              width=${edge} height=${edge}
-            >
-              ${getIconImage('randomGame')}
-            </svg>
-          </button><br />
-          <br />
-          <button class="menu-item" @click=${this.selectTap}
-	    alt="Discard Arrangement">
-            <svg id="discardArrange"
-              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
-              width=${edge} height=${edge}
-            >
-	      ${getIconImage(this.discardArrange ? 'uncheckedBox' : 'checkedBox')}
-            </svg>
-          </button><br />
-          <br />
-          <button class="menu-item" @click=${this.selectTap}
-            alt="Trigger You Win">
-            <svg id="youWin"
-              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
-              width=${edge} height=${edge}
-            >
-              ${getIconImage('youWin')}
-            </svg>
-          </button><br />
-          <button class="menu-item" @click=${this.selectTap}
-            alt="Trigger You Lose">
-            <svg id="youLose"
-              viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}"
-              width=${edge} height=${edge}
-            >
-              ${getIconImage('youLose')}
-            </svg>
-          </button><br />
+	  ${this.menu()}
         </div>
       </div>
     `;

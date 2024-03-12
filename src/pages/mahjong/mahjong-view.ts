@@ -231,8 +231,8 @@ export class MahjongView extends LitElement {
 	margin-right: auto;
       }
       dialog > div > svg {
-        width: ${2*edge}px;
-        height: ${2*edge}px;
+        width: ${1.5*edge}px;
+        height: ${1.5*edge}px;
 	stroke: white;
 	stroke-width: 4;
       }
@@ -253,9 +253,8 @@ export class MahjongView extends LitElement {
       <mahjong-menu-view
         .play=${this.play}
 	.discardArrange=${this.discardArrange}
-        .paddingLeft=${obj.paddingLeft}
-        .paddingTop=${obj.paddingTop}
-	.scale=${obj.playScale}
+	.scale=${obj.discardScale}
+	.orientation=${obj.orientation}
       ></mahjong-menu-view>
       <mahjong-discard-view
         .play=${this.play}

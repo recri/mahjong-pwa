@@ -5,7 +5,7 @@
   "display": "standalone",
   "start_url": "/",
   "short_name": "Mahjong Solitaire",
-  "theme_color": "##323657",
+  "theme_color": "#323657",
   "description": "Mahjong Solitaire as a PWA.",
   "orientation": "any",
   "background_color": "#323657",

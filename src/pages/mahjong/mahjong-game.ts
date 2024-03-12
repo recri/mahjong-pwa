@@ -137,7 +137,7 @@ export class Game {
       const div = [2, 1, 0][Math.floor(discardId / 12)];
       // eslint-enable no-bitwise
       const map = div * 12 + rem;
-      if (this.discardArrange) {
+      if ( ! this.discardArrange) {
         // and now exchange N with W and S with E
         if (map === 34) return this.discardSlots[21]; // N -> W
         if (map === 21) return this.discardSlots[34]; // W -> N
