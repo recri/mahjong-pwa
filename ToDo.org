@@ -33,23 +33,26 @@
 	redo the av controls as brush drawn symbols!
 [ ] get a different undo button
 [ ] get a copy url to clipboard button
-[?] make the toplevel menu switch between horizonal and vertical presentation
+[x] make the toplevel menu switch between horizonal and vertical presentation
 	depending on screen orientation.
 [ ] add box outline to the menu frame?
+[ ] lose box outline on the finish dialogs?
 [ ] add box outlines to the icon buttons?
 [ ] add hover/activation eye candy to the icon buttons?
 [ ] get a better presentation of the discard order options
 [ ] reinstate the no discard discard order option
 [ ] cancel the menu with stray taps outside the menu area
-[?] remove the end of game testing menu options.
-[?] reduce the autozoom activity
+[x] remove the end of game testing menu options.
+[x] reduce the autozoom activity
 	rewrite the viewbox meta item in index.html
 	said 1-5 zoom, initial 1, made it 1-2 zoom initial 1.
+	Didn't make that much difference, it may be advisory.
 [ ] convert the menu into a toolbar
-[?] the discard by play order display appears to be wrapping in some 
+[x] the discard by play order display appears to be wrapping in some 
 	situations.  Ah, it was the NSEW remapping being applied to
 	the discard by play order pile.
 [ ] save the current play state to disk, restore on restart
 	this consists of the game number, the discardArrange state,
 	and the discarded tile indexes.  Interacts with the 
 [ ] save the history, a list of game numbers played and the results of the games.
+[x] the menu was hidden beneath the discard pile

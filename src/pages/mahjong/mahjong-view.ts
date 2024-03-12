@@ -147,12 +147,15 @@ export class MahjongView extends LitElement {
       }
       mahjong-menu-view {
         flex: ${unsafeCSS(obj.menuPct)}%;
+	z-index: 1;
       }
       mahjong-discard-view {
         flex: ${unsafeCSS(obj.discardPct)}%;
+	z-index: 0;
       }
       mahjong-play-view {
         flex: ${unsafeCSS(obj.playPct)}%;
+	z-index: 0;
       }
     `;
     return obj;

@@ -104,7 +104,6 @@ export class MahjongMenuView extends LitElement {
 	top: 16px;
 	left: 16px;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        z-index: 1;
       }
 
       .show {
