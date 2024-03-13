@@ -28,16 +28,25 @@ export class MahjongMenuView extends LitElement {
     
   @property({ type: String }) orientation!: string;
     
-  /* eslint class-methods-use-this: ["error", { "exceptMethods": ["menuTap"] }] */
+// this menu unposting from stray clicks did not work well
+//  menuIsPosted: boolean = false;
+    
   menuTap() {
-      this.shadowRoot!.getElementById('myDropdown')!.classList.toggle('show');
-      // register a mouse tap event listener on the root window
-      // that calls menuUntap, which means this 
+//      console.log("menuTap");
+//    if ( ! this.menuIsPosted) {
+//      this.menuIsPosted = true;
+//      window.onclick = this.menuUntap;
+      this.shadowRoot!.getElementById('the-dropdown')!.classList.toggle('show');
+//    }
   }
 
   menuUntap() {
-      // unregister mouse tap event listener on the root window
-    this.shadowRoot!.getElementById('myDropdown')!.classList.toggle('show');
+//      console.log("menuUntap");
+//    if (this.menuIsPosted) {
+      this.shadowRoot!.getElementById('the-dropdown')!.classList.toggle('show');
+//      window.onclick = null;
+//      this.menuIsPosted = false;
+//    }
   }
 
   selectTap(e: MouseEvent) {
@@ -55,16 +64,6 @@ export class MahjongMenuView extends LitElement {
       this.menuUntap()
   }
 
-    static items = [
-	[ 'restartGame', 'Restart Game' ],
-	[ 'nextGame', 'Next Game' ],
-	[ 'previousGame', 'Previous Game' ],
-	[ 'randomGame', 'Random Game' ],
-	[ 'discardArrange', 'Discard Arrange' ],
-	[ 'youWin', 'Trigger You Win' ],
-	[ 'youLose', 'Trigger You Lose' ],
-    ];
-
   iconImageName(id: string): string {
     if (id === 'discardArrange')
       return this.discardArrange ? "checkedBox" : "uncheckedBox"
@@ -72,14 +71,19 @@ export class MahjongMenuView extends LitElement {
   }
 
   menu() {
-    const { iconWidth, iconHeight } = Constant;
-    const { selectTap } = this;
-    return MahjongMenuView.items.map(([id, alt]) =>
+    return [
+      [ 'undoLastMove', 'Undo Last Move' ],
+      [ 'restartGame', 'Restart Game' ],
+      [ 'previousGame', 'Previous Game' ],
+      [ 'randomGame', 'Random Game' ],
+      [ 'nextGame', 'Next Game' ],
+      [ 'discardArrange', 'Discard Arrange' ],
+//      [ 'youWin', 'Trigger You Win' ],
+//      [ 'youLose', 'Trigger You Lose' ],
+    ].map(([id, alt]) =>
       html`
-        <button class="menu-item" @click=${selectTap} alt="${alt}" id="${id}">
-          <svg viewBox="0 0 ${iconWidth} ${iconHeight}">
-	    ${getIconImage(this.iconImageName(id))}
-          </svg>
+        <button class="menu-item" @click=${this.selectTap} alt="${alt}" id="${id}">
+          ${getIconImage(this.iconImageName(id))}
         </button>
       `);
   }
@@ -103,6 +107,7 @@ export class MahjongMenuView extends LitElement {
         display: none;
 	top: 16px;
 	left: 16px;
+	padding: 10px
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
       }
 
@@ -120,8 +125,7 @@ export class MahjongMenuView extends LitElement {
       svg {
         width: ${edge}px;
         height: ${edge}px;
-	stroke: white;
-	stroke-width: 3;
+	fill: white;
       }
 
     `;
@@ -131,12 +135,10 @@ export class MahjongMenuView extends LitElement {
         ${style}
       </style>
       <div class="dropdown">
-        <button @click=${this.menuTap} class="dropdown-button svgbutton" title="menu">
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('hamburgerMenu')}
-          </svg>
+        <button @click=${this.menuTap} title="menu">
+          ${getIconImage('hamburgerMenu')}
         </button>
-        <div id="myDropdown" class="dropdown-content">
+        <div id="the-dropdown" class="dropdown-content">
 	  ${this.menu()}
         </div>
       </div>

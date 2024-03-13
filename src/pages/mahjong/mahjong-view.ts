@@ -170,11 +170,26 @@ export class MahjongView extends LitElement {
     return this.shadowRoot!.getElementById('youwin');
   }
 
-  /* eslint class-methods-use-this: ["error", { "exceptMethods": ["dialogShowModal"] }] */
+    /* eslint class-methods-use-this: ["error", { "exceptMethods": ["dialogShowModal","buttons"] }] */
   dialogShowModal(dialog: any) {
     if (dialog instanceof HTMLDialogElement) {
       dialog.showModal();
     }
+  }
+
+  buttons(tap: any) {
+    return [
+      [ 'undoLastMove', 'Undo Last Move' ],
+      [ 'restartGame', 'Restart Game' ],
+      [ 'previousGame', 'Previous Game' ],
+      [ 'randomGame', 'Random Game' ],
+      [ 'nextGame', 'Next Game' ],
+    ].map(([id, alt]) =>
+      html`
+        <button dialog-confirm @click=${tap} alt="${alt}" id="${id}">
+          ${getIconImage(id)}
+        </button>
+      `);
   }
 
   dialogClose(dialog: any, e: MouseEvent) {
@@ -194,11 +209,12 @@ export class MahjongView extends LitElement {
     }
   }
 
-  youloseTap(e: MouseEvent) {
+
+  youLoseTap(e: MouseEvent) {
       this.dialogClose(this.youlose, e);
   }
 
-  youwinTap(e: MouseEvent) {
+  youWinTap(e: MouseEvent) {
     this.dialogClose(this.youwin, e);
   }
 
@@ -220,10 +236,8 @@ export class MahjongView extends LitElement {
         position: relative;
         background-color: ${unsafeCSS(Constant.background)};
         color: white;
-        padding: 5px;
-        border-width: 2px;
-        border-color: white;
-        left: 32px;
+        padding: 10px;
+        border-width: 0px;
         overflow: auto;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         z-index: 1;
@@ -233,24 +247,16 @@ export class MahjongView extends LitElement {
 	margin-left: auto;
 	margin-right: auto;
       }
-      dialog > div > svg {
-        width: ${1.5*edge}px;
-        height: ${1.5*edge}px;
-	stroke: white;
-	stroke-width: 4;
-      }
-      dialog > div > button {
+      button {
         margin: 0px;
         border: none;
         padding: 0px;
         background-color: ${unsafeCSS(Constant.background)};
       }
-      dialog > div > button > svg {
+      svg {
         width: ${edge}px;
         height: ${edge}px;
-	stroke: white;
-	stroke-width: 3;
-	margin: none;
+	fill: white;
       }
       </style>
       <mahjong-menu-view
@@ -277,72 +283,19 @@ export class MahjongView extends LitElement {
 
       <dialog id="youlose" modal>
 	<div>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-	    ${getIconImage('youLose')}
-	  </svg>
+	  ${getIconImage('youLose')}
 	</div>
         <div class="buttons">
-          <button raised dialog-confirm id="previousGame" @click=${this.youloseTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('previousGame')}
-          </svg>
-	  </button>
-          <button raised dialog-confirm id="undoLastMove" @click=${this.youloseTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('goBack')}
-          </svg>
-          </button>
-          <button raised dialog-confirm id="randomGame" @click=${this.youloseTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('randomGame')}
-          </svg>
-          </button>
-          <button raised dialog-confirm id="restartGame" @click=${this.youloseTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('restartGame')}
-          </svg>
-          </button>
-          <button raised dialog-confirm id="nextGame" @click=${this.youloseTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('nextGame')}
-          </svg>
-          </button>
+	  ${this.buttons(this.youLoseTap)}
         </div>
       </dialog>
 
       <dialog id="youwin" modal>
 	<div>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('youWin')}
-          </svg>
+          ${getIconImage('youWin')}
 	</div>
         <div class="buttons">
-          <button raised dialog-confirm id="previousGame" @click=${this.youwinTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('previousGame')}
-          </svg>
-	  </button>
-          <button raised dialog-confirm id="undoLastMove" @click=${this.youwinTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('goBack')}
-          </svg>
-          </button>
-          <button raised dialog-confirm id="randomGame" @click=${this.youwinTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('randomGame')}
-          </svg>
-          </button>
-          </button>
-          <button raised dialog-confirm id="restartGame" @click=${this.youwinTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('restartGame')}
-          </svg>
-          </button>
-          <button raised dialog-confirm id="nextGame" @click=${this.youwinTap}>
-          <svg viewBox="0 0 ${Constant.iconWidth} ${Constant.iconHeight}">
-            ${getIconImage('nextGame')}
-          </svg>
-          </button>
+	  ${this.buttons(this.youWinTap)}
         </div>
       </dialog>
     `;
