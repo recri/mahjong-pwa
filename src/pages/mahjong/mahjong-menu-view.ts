@@ -1,4 +1,3 @@
-
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
@@ -25,67 +24,80 @@ export class MahjongMenuView extends LitElement {
   @property({ type: Boolean }) discardArrange!: boolean;
 
   @property({ type: Number }) scale!: number;
-    
+
   @property({ type: String }) orientation!: string;
-    
-// this menu unposting from stray clicks did not work well
-//  menuIsPosted: boolean = false;
-    
+
+  // this menu unposting from stray clicks did not work well
+  //  menuIsPosted: boolean = false;
+
   menuTap() {
-//      console.log("menuTap");
-//    if ( ! this.menuIsPosted) {
-//      this.menuIsPosted = true;
-//      window.onclick = this.menuUntap;
-      this.shadowRoot!.getElementById('the-dropdown')!.classList.toggle('show');
-//    }
+    //      console.log("menuTap");
+    //    if ( ! this.menuIsPosted) {
+    //      this.menuIsPosted = true;
+    //      window.onclick = this.menuUntap;
+    this.shadowRoot!.getElementById('the-dropdown')!.classList.toggle('show');
+    //    }
   }
 
   menuUntap() {
-//      console.log("menuUntap");
-//    if (this.menuIsPosted) {
-      this.shadowRoot!.getElementById('the-dropdown')!.classList.toggle('show');
-//      window.onclick = null;
-//      this.menuIsPosted = false;
-//    }
+    //      console.log("menuUntap");
+    //    if (this.menuIsPosted) {
+    this.shadowRoot!.getElementById('the-dropdown')!.classList.toggle('show');
+    //      window.onclick = null;
+    //      this.menuIsPosted = false;
+    //    }
   }
 
   selectTap(e: MouseEvent) {
-      if (e !== null && e.target !== null && e.target instanceof Element) {
-	  let { target } = e;
-	  while (target && target instanceof Element && ! target.id && target.parentElement) {
-	      // console.log(`selectTap ${target.tagName} has no id`);
-	      target = target.parentElement;
-	  }
-	  // console.log(`selectTap ${target.tagName} has id ${target.id}`);
-	  if (target && target.id) {
-	      this.play.selectTap(target.id);
-	  }
+    if (e !== null && e.target !== null && e.target instanceof Element) {
+      let { target } = e;
+      while (
+        target &&
+        target instanceof Element &&
+        !target.id &&
+        target.parentElement
+      ) {
+        // console.log(`selectTap ${target.tagName} has no id`);
+        target = target.parentElement;
       }
-      this.menuUntap()
+      // console.log(`selectTap ${target.tagName} has id ${target.id}`);
+      if (target && target.id) {
+        this.play.selectTap(target.id);
+      }
+    }
+    this.menuUntap();
   }
 
   iconImageName(id: string): string {
     if (id === 'discardArrange')
-      return this.discardArrange ? "checkedBox" : "uncheckedBox"
+      return this.discardArrange ? 'checkedBox' : 'uncheckedBox';
     return id;
   }
 
   menu() {
     return [
-      [ 'undoLastMove', 'Undo Last Move' ],
-      [ 'restartGame', 'Restart Game' ],
-      [ 'previousGame', 'Previous Game' ],
-      [ 'randomGame', 'Random Game' ],
-      [ 'nextGame', 'Next Game' ],
-      [ 'discardArrange', 'Discard Arrange' ],
-//      [ 'youWin', 'Trigger You Win' ],
-//      [ 'youLose', 'Trigger You Lose' ],
-    ].map(([id, alt]) =>
-      html`
-        <button class="menu-item" @click=${this.selectTap} alt="${alt}" id="${id}">
-          ${getIconImage(this.iconImageName(id))}
-        </button>
-      `);
+      ['undoLastMove', 'Undo Last Move'],
+      ['restartGame', 'Restart Game'],
+      ['previousGame', 'Previous Game'],
+      ['randomGame', 'Random Game'],
+      ['nextGame', 'Next Game'],
+      ['discardArrange', 'Discard Arrange'],
+      ['shareGame', 'Share Game to Clipboard'],
+      //      [ 'youWin', 'Trigger You Win' ],
+      //      [ 'youLose', 'Trigger You Lose' ],
+    ].map(
+      ([id, alt]) =>
+        html`
+          <button
+            class="menu-item"
+            @click=${this.selectTap}
+            alt="${alt}"
+            id="${id}"
+          >
+            ${getIconImage(this.iconImageName(id))}
+          </button>
+        `
+    );
   }
 
   override render() {
@@ -138,9 +150,7 @@ export class MahjongMenuView extends LitElement {
         <button @click=${this.menuTap} title="menu">
           ${getIconImage('hamburgerMenu')}
         </button>
-        <div id="the-dropdown" class="dropdown-content">
-	  ${this.menu()}
-        </div>
+        <div id="the-dropdown" class="dropdown-content">${this.menu()}</div>
       </div>
     `;
   }

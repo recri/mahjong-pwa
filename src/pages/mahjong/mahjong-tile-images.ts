@@ -619,7 +619,7 @@ const tiles: ObjectMap = {
   <g transform="translate(43.5 31.5) scale(.73 .66)">${images.bamboo}</g>
   <g transform="translate(43.5 50.5) scale(.73 .66)">${images.bamboo}</g>
 </g>
-`
+`,
 };
 
 export const getTileImageNames = (): string[] =>

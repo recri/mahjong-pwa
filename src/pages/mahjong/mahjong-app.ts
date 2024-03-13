@@ -8,6 +8,11 @@ import { Tile } from './mahjong-tile.js';
 import { Play } from './mahjong-play.js';
 import './mahjong-view.js';
 
+/* eslint-disable no-bitwise */
+const hashCode = (s: string): number =>
+  s.split('').reduce((a, b) => ((a << 5) - a + b.charCodeAt(0)) | 0, 0);
+/* eslint-disable no-bitwise */
+
 /**
  * the application shell for mahjong
  * hosts the three view web components of the game
@@ -34,18 +39,35 @@ export class MahjongApp extends LitElement {
   @property({ type: Object }) selectedTile!: Tile | undefined;
 
   @property({ type: Boolean }) discardArrange: boolean;
-    
+
   @property({ type: Boolean }) gameIsCompleted: boolean;
-    
+
   @property({ type: Boolean }) gameIsDeadlocked: boolean;
-    
+
   @property({ type: Number }) width: number;
 
   @property({ type: Number }) height: number;
 
   constructor() {
     super();
-    this.play = new Play();
+    // possibilities:
+    // 1) https://host.domain/
+    // 2) https://host.domain/#hash
+    // 3) saved game in progress
+    if (window.location.hash) {
+      const hash = parseInt(window.location.hash.substr(1), 10);
+      if (Number.isNaN(hash)) {
+        // console.log(`integer hash ${hash}`);
+        this.play = new Play(hash);
+      } else {
+        const hash2 = hashCode(window.location.hash.substr(1));
+        // console.log(`hashed hash ${hash2}`);
+        this.play = new Play(hash2);
+      }
+    } else {
+      // console.log(`no hash`);
+      this.play = new Play(0);
+    }
     this.playTiles = this.play.playTiles;
     this.discardTiles = this.play.discardTiles;
     this.discardArrange = false;
@@ -95,17 +117,16 @@ export class MahjongApp extends LitElement {
 
       <mahjong-view
         .play=${this.play}
-	.gameNumber=${this.play.gameNumber}
-	.discardArrange=${this.discardArrange}
-	.gameIsDeadlocked=${this.gameIsDeadlocked}
-	.gameIsCompleted=${this.gameIsCompleted}
-	.playTiles=${this.playTiles}
+        .gameNumber=${this.play.gameNumber}
+        .discardArrange=${this.discardArrange}
+        .gameIsDeadlocked=${this.gameIsDeadlocked}
+        .gameIsCompleted=${this.gameIsCompleted}
+        .playTiles=${this.playTiles}
         .discardTiles=${this.discardTiles}
         .selectedTile=${this.selectedTile}
         .width=${this.width}
         .height=${this.height}
       ></mahjong-view>
-
     `;
   }
 }

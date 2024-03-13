@@ -38,12 +38,12 @@ export class Play {
     return this.game.canPlayTiles;
   }
 
-  constructor() {
+  constructor(gameNumber: number) {
     this.game = new Game();
     this.deal = new GameDeal();
     this.gameIsCompleted = false;
     this.gameIsDeadlocked = false;
-    this.dealGame();
+    this.newGame(gameNumber);
   }
 
   // messages from and to the display hierarchy
@@ -57,16 +57,36 @@ export class Play {
   }
 
   updateTiles() {
+    // not sure why the gameApp can't just have getters to update these properties
     if (this.gameApp !== undefined) {
-	// this could be done with
-	// if (this.gameApp[prop] !== this[prop]) this.gameApp[prop] = this[prop];
-	// in a loop over prop names
-      if (this.gameApp.playTiles !== this.playTiles) { this.gameApp.playTiles = this.playTiles; }
-      if (this.gameApp.discardTiles !== this.discardTiles) { this.gameApp.discardTiles = this.discardTiles; }
-      if (this.gameApp.selectedTile !== this.selectedTile) { this.gameApp.selectedTile = this.selectedTile; }
-	if (this.gameApp.discardArrange !== this.discardArrange) { this.gameApp.discardArrange = this.discardArrange; }
-	if (this.gameApp.gameIsCompleted !== this.gameIsCompleted) { this.gameApp.gameIsCompleted = this.gameIsCompleted; }
-	if (this.gameApp.gameIsDeadlocked !== this.gameIsDeadlocked) { this.gameApp.gameIsDeadlocked = this.gameIsDeadlocked; }
+      //      [
+      //        'playTiles',
+      //        'discardTiles',
+      //        'selectedTile',
+      //        'discardArrange',
+      //        'gameIsCompleted',
+      //        'gameIsDeadlocked',
+      //      ].forEach(prop => {
+      //        if (this.gameApp[prop] !== this[prop]) this.gameApp[prop] = this[prop];
+      //      });
+      if (this.gameApp.playTiles !== this.playTiles) {
+        this.gameApp.playTiles = this.playTiles;
+      }
+      if (this.gameApp.discardTiles !== this.discardTiles) {
+        this.gameApp.discardTiles = this.discardTiles;
+      }
+      if (this.gameApp.selectedTile !== this.selectedTile) {
+        this.gameApp.selectedTile = this.selectedTile;
+      }
+      if (this.gameApp.discardArrange !== this.discardArrange) {
+        this.gameApp.discardArrange = this.discardArrange;
+      }
+      if (this.gameApp.gameIsCompleted !== this.gameIsCompleted) {
+        this.gameApp.gameIsCompleted = this.gameIsCompleted;
+      }
+      if (this.gameApp.gameIsDeadlocked !== this.gameIsDeadlocked) {
+        this.gameApp.gameIsDeadlocked = this.gameIsDeadlocked;
+      }
     }
   }
 
@@ -78,10 +98,11 @@ export class Play {
   }
 
   // deal a new game
-  dealGame(offset: number = 0) {
+  newGame(offset: number = 0) {
     /* eslint-disable no-bitwise */
     this.gameNumber = (this.gameNumber + offset) & 0x7fffffff;
     /* eslint-enable no-bitwise */
+    window.location.hash = `#${this.gameNumber}`;
     this.deal.dealGame(this.gameNumber);
     this.game.newGame(this.deal.tiles);
     this.updateTiles();
@@ -183,21 +204,27 @@ export class Play {
   selectTap(id: string) {
     switch (id) {
       case 'restartGame':
-        this.dealGame(+0);
+        this.newGame(+0);
         break;
       case 'nextGame':
-        this.dealGame(+1);
+        this.newGame(+1);
         break;
       case 'previousGame':
-        this.dealGame(-1);
+        this.newGame(-1);
         break;
       case 'randomGame':
-        this.dealGame(+this.random());
+        this.newGame(+this.random());
         break;
       case 'discardArrange':
         this.game.rearrangeDiscardSlots();
         this.updateTiles();
         break;
+      case 'shareGame': {
+        const location = `${window.location.protocol}//${window.location.host}/${window.location.hash}`;
+        // console.log(`shareGame ${location}`);
+        navigator.clipboard.writeText(location);
+        break;
+      }
       case 'youWin':
         this.gameIsCompleted = true;
         this.updateTiles();

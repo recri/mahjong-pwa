@@ -64,9 +64,9 @@ export class MahjongView extends LitElement {
   @property({ type: Object }) selectedTile!: Tile | undefined;
 
   @property({ type: Boolean }) discardArrange!: boolean;
-   
+
   @property({ type: Boolean }) gameIsCompleted!: boolean;
-   
+
   @property({ type: Boolean }) gameIsDeadlocked!: boolean;
 
   resolveOrientation() {
@@ -147,15 +147,15 @@ export class MahjongView extends LitElement {
       }
       mahjong-menu-view {
         flex: ${unsafeCSS(obj.menuPct)}%;
-	z-index: 1;
+        z-index: 1;
       }
       mahjong-discard-view {
         flex: ${unsafeCSS(obj.discardPct)}%;
-	z-index: 0;
+        z-index: 0;
       }
       mahjong-play-view {
         flex: ${unsafeCSS(obj.playPct)}%;
-	z-index: 0;
+        z-index: 0;
       }
     `;
     return obj;
@@ -170,7 +170,7 @@ export class MahjongView extends LitElement {
     return this.shadowRoot!.getElementById('youwin');
   }
 
-    /* eslint class-methods-use-this: ["error", { "exceptMethods": ["dialogShowModal","buttons"] }] */
+  /* eslint class-methods-use-this: ["error", { "exceptMethods": ["dialogShowModal","buttons"] }] */
   dialogShowModal(dialog: any) {
     if (dialog instanceof HTMLDialogElement) {
       dialog.showModal();
@@ -179,17 +179,19 @@ export class MahjongView extends LitElement {
 
   buttons(tap: any) {
     return [
-      [ 'undoLastMove', 'Undo Last Move' ],
-      [ 'restartGame', 'Restart Game' ],
-      [ 'previousGame', 'Previous Game' ],
-      [ 'randomGame', 'Random Game' ],
-      [ 'nextGame', 'Next Game' ],
-    ].map(([id, alt]) =>
-      html`
-        <button dialog-confirm @click=${tap} alt="${alt}" id="${id}">
-          ${getIconImage(id)}
-        </button>
-      `);
+      ['undoLastMove', 'Undo Last Move'],
+      ['restartGame', 'Restart Game'],
+      ['previousGame', 'Previous Game'],
+      ['randomGame', 'Random Game'],
+      ['nextGame', 'Next Game'],
+    ].map(
+      ([id, alt]) =>
+        html`
+          <button dialog-confirm @click=${tap} alt="${alt}" id="${id}">
+            ${getIconImage(id)}
+          </button>
+        `
+    );
   }
 
   dialogClose(dialog: any, e: MouseEvent) {
@@ -198,20 +200,24 @@ export class MahjongView extends LitElement {
     }
     if (e !== null && e.target !== null && e.target instanceof Element) {
       let { target } = e;
-	while (target && target instanceof Element && ! target.id && target.parentElement) {
-	    // console.log(`selectTap ${target.tagName} has no id`);
-	    target = target.parentElement;
-	}
-	// console.log(`selectTap ${target.tagName} has id ${target.id}`);
-	if (target && target.id) {
-	    this.play.dialogTap(target.id);
-	}
+      while (
+        target &&
+        target instanceof Element &&
+        !target.id &&
+        target.parentElement
+      ) {
+        // console.log(`selectTap ${target.tagName} has no id`);
+        target = target.parentElement;
+      }
+      // console.log(`selectTap ${target.tagName} has id ${target.id}`);
+      if (target && target.id) {
+        this.play.dialogTap(target.id);
+      }
     }
   }
 
-
   youLoseTap(e: MouseEvent) {
-      this.dialogClose(this.youlose, e);
+    this.dialogClose(this.youlose, e);
   }
 
   youWinTap(e: MouseEvent) {
@@ -231,39 +237,38 @@ export class MahjongView extends LitElement {
     }
     return html`
       <style>
-        ${obj.style}
-      dialog {
-        position: relative;
-        background-color: ${unsafeCSS(Constant.background)};
-        color: white;
-        padding: 10px;
-        border-width: 0px;
-        overflow: auto;
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        z-index: 1;
-      }
-      dialog > div {
-	max-width: fit-content;
-	margin-left: auto;
-	margin-right: auto;
-      }
-      button {
-        margin: 0px;
-        border: none;
-        padding: 0px;
-        background-color: ${unsafeCSS(Constant.background)};
-      }
-      svg {
-        width: ${edge}px;
-        height: ${edge}px;
-	fill: white;
-      }
+        ${obj.style} dialog {
+          position: relative;
+          background-color: ${unsafeCSS(Constant.background)};
+          color: white;
+          padding: 10px;
+          border-width: 0px;
+          overflow: auto;
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          z-index: 1;
+        }
+        dialog > div {
+          max-width: fit-content;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        button {
+          margin: 0px;
+          border: none;
+          padding: 0px;
+          background-color: ${unsafeCSS(Constant.background)};
+        }
+        svg {
+          width: ${edge}px;
+          height: ${edge}px;
+          fill: white;
+        }
       </style>
       <mahjong-menu-view
         .play=${this.play}
-	.discardArrange=${this.discardArrange}
-	.scale=${obj.discardScale}
-	.orientation=${obj.orientation}
+        .discardArrange=${this.discardArrange}
+        .scale=${obj.discardScale}
+        .orientation=${obj.orientation}
       ></mahjong-menu-view>
       <mahjong-discard-view
         .play=${this.play}
@@ -282,21 +287,13 @@ export class MahjongView extends LitElement {
       ></mahjong-play-view>
 
       <dialog id="youlose" modal>
-	<div>
-	  ${getIconImage('youLose')}
-	</div>
-        <div class="buttons">
-	  ${this.buttons(this.youLoseTap)}
-        </div>
+        <div>${getIconImage('youLose')}</div>
+        <div class="buttons">${this.buttons(this.youLoseTap)}</div>
       </dialog>
 
       <dialog id="youwin" modal>
-	<div>
-          ${getIconImage('youWin')}
-	</div>
-        <div class="buttons">
-	  ${this.buttons(this.youWinTap)}
-        </div>
+        <div>${getIconImage('youWin')}</div>
+        <div class="buttons">${this.buttons(this.youWinTap)}</div>
       </dialog>
     `;
   }
