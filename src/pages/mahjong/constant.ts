@@ -30,6 +30,7 @@ const landscapeDiscardWidth =
 const landscapeDiscardHeight =
   landscapeDiscardRows * faceHeight + 4 * bottomMargin;
 const landscapeDiscardAspect = landscapeDiscardWidth / landscapeDiscardHeight;
+const mahjongAppPadding = 10;
 
 // other
 const background = '#323657';
@@ -144,4 +145,5 @@ export const Constant = {
   background,
   tileNames,
   tileTitles,
+  mahjongAppPadding,
 };

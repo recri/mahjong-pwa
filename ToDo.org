@@ -11,6 +11,8 @@
    
 	this means that clicking a url with a gameIdentifier will take you
 	to the web app to play the specified game.
+
+	don't put the game number in the url, 
 [x] get the launch url out of the game for sharing
 	I guess it follows that you need to be able to get to the game id
 	of the game you're playing, either by copying the url as a selection
@@ -35,13 +37,13 @@
 [x] get a copy url to clipboard button
 [x] make the toplevel menu switch between horizonal and vertical presentation
 	depending on screen orientation.
-[ ] add box outline to the menu frame?
-[ ] lose box outline on the finish dialogs?
-[ ] add box outlines to the icon buttons?
+[-] add box outline to the menu frame?
+[x] lose box outline on the finish dialogs?
+[-] add box outlines to the icon buttons?
 [ ] add hover/activation eye candy to the icon buttons?
-[ ] get a better presentation of the discard order options
+[x] get a better presentation of the discard order options
 [ ] reinstate the no discard discard order option
-[ ] cancel the menu with stray taps outside the menu area
+[?] cancel the menu with stray taps outside the menu area
 [x] remove the end of game testing menu options.
 [x] reduce the autozoom activity
 	rewrite the viewbox meta item in index.html
@@ -51,8 +53,11 @@
 [x] the discard by play order display appears to be wrapping in some 
 	situations.  Ah, it was the NSEW remapping being applied to
 	the discard by play order pile.
-[ ] save the current play state to disk, restore on restart
+[x] save the current play state to disk, restore on restart
 	this consists of the game number, the discardArrange state,
-	and the discarded tile indexes.  Interacts with the 
+	and the discarded tile indexes.  Interacts with the url hash.
+	Only saving the gameNumber for now.
 [ ] save the history, a list of game numbers played and the results of the games.
 [x] the menu was hidden beneath the discard pile
+[ ] safari doesn't show hash in navigation bar url, but appears to apply it
+[x] refresh appears to advance the hash in chrome, random jump.

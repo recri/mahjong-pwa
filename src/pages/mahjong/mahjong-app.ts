@@ -1,11 +1,13 @@
 /**
  */
 
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, unsafeCSS } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { Tile } from './mahjong-tile.js';
 import { Play } from './mahjong-play.js';
+import { Constant } from './constant.js';
+
 import './mahjong-view.js';
 
 /* eslint-disable no-bitwise */
@@ -20,15 +22,37 @@ const hashCode = (s: string): number =>
  */
 @customElement('mahjong-app')
 export class MahjongApp extends LitElement {
-  static padding = 10;
-
   static override styles = css`
     :host {
       display: block;
       border: none;
-      padding: ${MahjongApp.padding}px;
+      /* ${Constant.mahjongAppPadding} */
+      padding: 0px;
+    }
+    .largest-contentful-paint {
+      color: ${unsafeCSS(Constant.background)};
+      position: relative;
+      top: -100px;
+      z-index: -1;
     }
   `;
+
+  static hasProp = (name: string): boolean =>
+    window.localStorage.getItem(name) !== null;
+
+  static getProp = (name: string): string =>
+    MahjongApp.hasProp(name) ? window.localStorage.getItem(name)! : '';
+
+  static putProp = (name: string, value: string) =>
+    window.localStorage.setItem(name, value);
+
+  static getIntProp = (name: string): number =>
+    MahjongApp.hasProp(name)
+      ? parseInt(window.localStorage.getItem(name)!, 10)
+      : 0;
+
+  static putIntProp = (name: string, value: number) =>
+    window.localStorage.setItem(name, `${value}`);
 
   @property({ type: Object }) play: Play;
 
@@ -50,24 +74,18 @@ export class MahjongApp extends LitElement {
 
   constructor() {
     super();
-    // possibilities:
-    // 1) https://host.domain/
-    // 2) https://host.domain/#hash
-    // 3) saved game in progress
+
+    let gameNumber = MahjongApp.hasProp('gameNumber')
+      ? MahjongApp.getIntProp('gameNumber')
+      : 0;
+
     if (window.location.hash) {
-      const hash = parseInt(window.location.hash.substr(1), 10);
-      if (Number.isNaN(hash)) {
-        // console.log(`integer hash ${hash}`);
-        this.play = new Play(hash);
-      } else {
-        const hash2 = hashCode(window.location.hash.substr(1));
-        // console.log(`hashed hash ${hash2}`);
-        this.play = new Play(hash2);
-      }
-    } else {
-      // console.log(`no hash`);
-      this.play = new Play(0);
+      const content = window.location.hash.substr(1);
+      const hash = parseInt(content, 10);
+      gameNumber = !Number.isNaN(hash) ? hash : hashCode(content);
     }
+
+    this.play = new Play(gameNumber);
     this.playTiles = this.play.playTiles;
     this.discardTiles = this.play.discardTiles;
     this.discardArrange = false;
@@ -99,14 +117,11 @@ export class MahjongApp extends LitElement {
   }
   /* eslint-enable wc/guard-super-call */
 
-  //
-  //
-  //
   override render() {
     const style = css`
       mahjong-view {
-        width: ${this.width - 2 * MahjongApp.padding}px;
-        height: ${this.height - 2 * MahjongApp.padding}px;
+        width: ${this.width - 2 * Constant.mahjongAppPadding}px;
+        height: ${this.height - 2 * Constant.mahjongAppPadding}px;
       }
     `;
     // console.log('app render');
@@ -127,6 +142,7 @@ export class MahjongApp extends LitElement {
         .width=${this.width}
         .height=${this.height}
       ></mahjong-view>
+      <span class="largest-contentful-paint">Largest Contentful Paint</span>
     `;
   }
 }

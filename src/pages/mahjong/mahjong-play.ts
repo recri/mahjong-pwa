@@ -98,14 +98,15 @@ export class Play {
   }
 
   // deal a new game
-  newGame(offset: number = 0) {
+  newGame(gameNumber: number = 0) {
     /* eslint-disable no-bitwise */
-    this.gameNumber = (this.gameNumber + offset) & 0x7fffffff;
+    this.gameNumber = gameNumber & 0x7fffffff;
     /* eslint-enable no-bitwise */
-    window.location.hash = `#${this.gameNumber}`;
+    // window.location.hash = `#${this.gameNumber}`;
     this.deal.dealGame(this.gameNumber);
     this.game.newGame(this.deal.tiles);
     this.updateTiles();
+    MahjongApp.putIntProp('gameNumber', this.gameNumber);
   }
 
   // intents
@@ -204,23 +205,23 @@ export class Play {
   selectTap(id: string) {
     switch (id) {
       case 'restartGame':
-        this.newGame(+0);
+        this.newGame(this.gameNumber + 0);
         break;
       case 'nextGame':
-        this.newGame(+1);
+        this.newGame(this.gameNumber + 1);
         break;
       case 'previousGame':
-        this.newGame(-1);
+        this.newGame(this.gameNumber - 1);
         break;
       case 'randomGame':
-        this.newGame(+this.random());
+        this.newGame(this.gameNumber + this.random());
         break;
       case 'discardArrange':
         this.game.rearrangeDiscardSlots();
         this.updateTiles();
         break;
       case 'shareGame': {
-        const location = `${window.location.protocol}//${window.location.host}/${window.location.hash}`;
+        const location = `${window.location.protocol}//${window.location.host}/#${this.gameNumber}`;
         // console.log(`shareGame ${location}`);
         navigator.clipboard.writeText(location);
         break;
