@@ -76,15 +76,15 @@ export class MahjongMenuView extends LitElement {
 
   menu() {
     return [
-      ['undoLastMove', 'Undo Last Move'],
+      // ['undoLastMove', 'Undo Last Move'], // unnecessary symmetry
       ['restartGame', 'Restart Game'],
       ['previousGame', 'Previous Game'],
       ['randomGame', 'Random Game'],
       ['nextGame', 'Next Game'],
       ['discardArrange', 'Discard Arrange'],
       ['shareGame', 'Share Game to Clipboard'],
-      //      [ 'youWin', 'Trigger You Win' ],
-      //      [ 'youLose', 'Trigger You Lose' ],
+      // [ 'youWin', 'Trigger You Win' ], // testing
+      // [ 'youLose', 'Trigger You Lose' ], // testing
     ].map(
       ([id, alt]) =>
         html`
