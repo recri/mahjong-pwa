@@ -40,7 +40,7 @@
 [-] add box outline to the menu frame?
 [x] lose box outline on the finish dialogs?
 [-] add box outlines to the icon buttons?
-[ ] add hover/activation eye candy to the icon buttons?
+[-] add hover/activation eye candy to the icon buttons?
 [x] get a better presentation of the discard order options
 [ ] reinstate the no discard discard order option
 [?] cancel the menu with stray taps outside the menu area
@@ -49,7 +49,7 @@
 	rewrite the viewbox meta item in index.html
 	said 1-5 zoom, initial 1, made it 1-2 zoom initial 1.
 	Didn't make that much difference, it may be advisory.
-[ ] convert the menu into a toolbar
+[x] convert the menu into a toolbar
 [x] the discard by play order display appears to be wrapping in some 
 	situations.  Ah, it was the NSEW remapping being applied to
 	the discard by play order pile.
@@ -61,3 +61,5 @@
 [x] the menu was hidden beneath the discard pile
 [ ] safari doesn't show hash in navigation bar url, but appears to apply it
 [x] refresh appears to advance the hash in chrome, random jump.
+[ ] end of game dialog not centering, not wide enough for all icon buttons
+[ ] is the discard order being saved and restored.
