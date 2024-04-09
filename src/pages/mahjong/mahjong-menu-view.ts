@@ -70,8 +70,8 @@ export class MahjongMenuView extends LitElement {
       ['nextGame', 'Next Game'],
       ['discardArrange', 'Discard Arrange'],
       ['shareGame', 'Share Game to Clipboard'],
-      ['youWin', 'Trigger You Win'], // testing
-      ['youLose', 'Trigger You Lose'], // testing
+      //      ['youWin', 'Trigger You Win'], // testing
+      //      ['youLose', 'Trigger You Lose'], // testing
     ].map(
       ([id, alt]) =>
         html`
