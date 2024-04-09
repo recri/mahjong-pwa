@@ -27,25 +27,12 @@ export class MahjongMenuView extends LitElement {
 
   @property({ type: String }) orientation!: string;
 
-  // this menu unposting from stray clicks did not work well
-  //  menuIsPosted: boolean = false;
-
   menuTap() {
-    //      console.log("menuTap");
-    //    if ( ! this.menuIsPosted) {
-    //      this.menuIsPosted = true;
-    //      window.onclick = this.menuUntap;
     this.shadowRoot!.getElementById('the-dropdown')!.classList.toggle('show');
-    //    }
   }
 
   menuUntap() {
-    //      console.log("menuUntap");
-    //    if (this.menuIsPosted) {
     this.shadowRoot!.getElementById('the-dropdown')!.classList.toggle('show');
-    //      window.onclick = null;
-    //      this.menuIsPosted = false;
-    //    }
   }
 
   selectTap(e: MouseEvent) {
@@ -83,8 +70,8 @@ export class MahjongMenuView extends LitElement {
       ['nextGame', 'Next Game'],
       ['discardArrange', 'Discard Arrange'],
       ['shareGame', 'Share Game to Clipboard'],
-      // [ 'youWin', 'Trigger You Win' ], // testing
-      // [ 'youLose', 'Trigger You Lose' ], // testing
+      ['youWin', 'Trigger You Win'], // testing
+      ['youLose', 'Trigger You Lose'], // testing
     ].map(
       ([id, alt]) =>
         html`

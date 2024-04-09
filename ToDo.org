@@ -62,4 +62,7 @@
 [ ] safari doesn't show hash in navigation bar url, but appears to apply it
 [x] refresh appears to advance the hash in chrome, random jump.
 [ ] end of game dialog not centering, not wide enough for all icon buttons
-[ ] is the discard order being saved and restored.
+[ ] one aligns and one doesn't?
+[ ] is the discard order being saved and restored?
+[ ] ipad not displaying any icon for installed app
+[ ] ipad tool bar conflicts with ipad system notifications

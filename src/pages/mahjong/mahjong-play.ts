@@ -219,6 +219,7 @@ export class Play {
       case 'discardArrange':
         this.game.rearrangeDiscardSlots();
         this.updateTiles();
+        MahjongApp.putBoolProp('discardArrange', this.discardArrange);
         break;
       case 'shareGame': {
         const location = `${window.location.protocol}//${window.location.host}/#${this.gameNumber}`;

@@ -140,24 +140,6 @@ export class MahjongView extends LitElement {
       );
       obj.paddingLeft = 0;
     }
-    obj.style = css`
-      :host {
-        flex-direction: ${unsafeCSS(obj.direction)};
-        gap: ${unsafeCSS(obj.gap)}px;
-      }
-      mahjong-menu-view {
-        flex: ${unsafeCSS(obj.menuPct)}%;
-        z-index: 1;
-      }
-      mahjong-discard-view {
-        flex: ${unsafeCSS(obj.discardPct)}%;
-        z-index: 0;
-      }
-      mahjong-play-view {
-        flex: ${unsafeCSS(obj.playPct)}%;
-        z-index: 0;
-      }
-    `;
     return obj;
   }
 
@@ -186,11 +168,9 @@ export class MahjongView extends LitElement {
       ['nextGame', 'Next Game'],
     ].map(
       ([id, alt]) =>
-        html`
-          <button dialog-confirm @click=${tap} alt="${alt}" id="${id}">
-            ${getIconImage(id)}
-          </button>
-        `
+        html`<button dialog-confirm @click=${tap} alt="${alt}" id="${id}">
+          ${getIconImage(id)}
+        </button>`
     );
   }
 
@@ -237,7 +217,23 @@ export class MahjongView extends LitElement {
     }
     return html`
       <style>
-        ${obj.style} dialog {
+        :host {
+          flex-direction: ${unsafeCSS(obj.direction)};
+          gap: ${unsafeCSS(obj.gap)}px;
+        }
+        mahjong-menu-view {
+          flex: ${unsafeCSS(obj.menuPct)}%;
+          z-index: 1;
+        }
+        mahjong-discard-view {
+          flex: ${unsafeCSS(obj.discardPct)}%;
+          z-index: 0;
+        }
+        mahjong-play-view {
+          flex: ${unsafeCSS(obj.playPct)}%;
+          z-index: 0;
+        }
+        dialog {
           position: relative;
           background-color: ${unsafeCSS(Constant.background)};
           color: white;
@@ -246,6 +242,7 @@ export class MahjongView extends LitElement {
           overflow: auto;
           box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
           z-index: 1;
+          margin: auto;
         }
         dialog > div {
           max-width: fit-content;

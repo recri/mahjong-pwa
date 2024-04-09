@@ -1,21 +1,3 @@
-{
-  "id": "/",
-  "scope": "/",
-  "name": "Mahjong",
-  "display": "standalone",
-  "start_url": "/",
-  "short_name": "Mahjong Solitaire",
-  "theme_color": "#323657",
-  "description": "Mahjong Solitaire as a PWA.",
-  "orientation": "any",
-  "background_color": "#323657",
-  "related_applications": [],
-  "prefer_related_applications": false,
-  "display_override": ["window-controls-overlay"],
-  "launch_handler": {
-    "client_mode": "focus-existing"
-  },
-  "icons": [
     {
       "src": "assests/icon.svg",
       "sizes": "any",
@@ -144,16 +126,6 @@
     {
       "src": "assets/maskable-128x128.png",
       "sizes": "128x128",
-      "type": "image/png",
+      "type": "image/png"
       "purpose": "maskable"
     }
-  ],
-  "features": [
-    "Cross Platform",
-    "fast",
-    "simple"
-  ],
-  "categories": [
-    "games", "productivity"
-  ]
-}

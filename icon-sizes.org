@@ -1,0 +1,41 @@
+
+  -rw-rw-r-- 1 rec rec  2331 Mar 11 13:53 icon.svg
+  -rw-rw-r-- 1 rec rec  4831 Jan 20 13:21 maskable_icon_x128.png
+[x] Lighthouse wants 192x192 512x512.
+[x] Suggested that it should want 144x144.
+[ ] native app in iOS must supply launch image of 1920x1080
+[ ] windows apps 16x16 20x20 24x24 30x30 32x32 36x36 40x40 48x48 60x60 64x64
+	72x72 80x80 96x96 256x256
+[ ] for PWA 48x48 72x72 96x96 144x144 168x168 192x192 256x256 512x512
+[ ] edge expects 192x192 256x256 384x384 512x512
+[ ] iOS wants 180x180 167x167 152x152 1024x1024
+[ ] 128x128
+* So we need to run something like this:
+cat <%% > icons.json
+    {
+      "src": "assests/icon.svg",
+      "sizes": "any",
+      "type": "image/svg"
+    },
+%%
+
+for x in 16 20 24 30 32 36 40 48 60 64 72 80 96 128 144 152 167 168 180 192 256 384 512 1024; do
+  convert -background "#ffffff" -density 1000 icon.svg -gravity center -resize ${x}x${x} -resize 80% -extent ${x}x${x} icon-${x}x${x}.png
+  cat <%% >> icons.json
+    {
+      "src": "assets/icon-${x}x${x}.png",
+      "sizes": "${x}x${x}",
+      "type": "image/png"
+    },
+%%
+done
+x=128
+convert -background "#323657" -density 1000 icon.svg -gravity center -resize ${x}x${x} -resize 80% -extent ${x}x${x} maskable-${x}x${x}.png
+cat <%% >> icons.json
+    {
+      "src": "assets/maskable-${x}x${x}.png",
+      "sizes": "${x}x${x}",
+      "type": "image/png"
+      "purpose": "maskable"
+    }
+%%

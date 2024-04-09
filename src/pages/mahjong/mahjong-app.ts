@@ -46,12 +46,20 @@ export class MahjongApp extends LitElement {
   static putProp = (name: string, value: string) =>
     window.localStorage.setItem(name, value);
 
-  static getIntProp = (name: string): number =>
+  static getIntProp = (name: string, defValue: number): number =>
     MahjongApp.hasProp(name)
       ? parseInt(window.localStorage.getItem(name)!, 10)
-      : 0;
+      : defValue;
 
   static putIntProp = (name: string, value: number) =>
+    window.localStorage.setItem(name, `${value}`);
+
+  static getBoolProp = (name: string, defValue: boolean): boolean =>
+    MahjongApp.hasProp(name)
+      ? window.localStorage.getItem(name) === 'true'
+      : defValue;
+
+  static putBoolProp = (name: string, value: boolean) =>
     window.localStorage.setItem(name, `${value}`);
 
   @property({ type: Object }) play: Play;
@@ -75,9 +83,7 @@ export class MahjongApp extends LitElement {
   constructor() {
     super();
 
-    let gameNumber = MahjongApp.hasProp('gameNumber')
-      ? MahjongApp.getIntProp('gameNumber')
-      : 0;
+    let gameNumber = MahjongApp.getIntProp('gameNumber', 0);
 
     if (window.location.hash) {
       const content = window.location.hash.substr(1);
@@ -88,7 +94,7 @@ export class MahjongApp extends LitElement {
     this.play = new Play(gameNumber);
     this.playTiles = this.play.playTiles;
     this.discardTiles = this.play.discardTiles;
-    this.discardArrange = false;
+    this.discardArrange = MahjongApp.getBoolProp('discardArrange', false);
     this.gameIsCompleted = false;
     this.gameIsDeadlocked = false;
     this.width = 200;
